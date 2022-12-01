@@ -1,0 +1,17 @@
+.main-header {
+  background-color: green;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.nav-bar ul {
+  list-style: none;
+  display: flex;
+  gap: 1em;
+}
+.nav-bar a {
+  text-decoration: none;
+  color: white;
+}
+.active {
+  color: gold !important;
+}
