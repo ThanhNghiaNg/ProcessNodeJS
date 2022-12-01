@@ -1,0 +1,4 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/Lab/Lab6/Lab6.1/front-end/node_modules
