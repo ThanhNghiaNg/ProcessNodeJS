@@ -3,7 +3,7 @@ import "./main.css";
 
 const Layout = (props) => {
   return (
-    <main>
+    <>
       <header className="main-header">
         <nav className="main-header__nav">
           <ul className="main-header__item-list">
@@ -25,8 +25,9 @@ const Layout = (props) => {
           </ul>
         </nav>
       </header>
-      {props.children}
-    </main>
+
+      <main className="main">{props.children}</main>
+    </>
   );
 };
 
