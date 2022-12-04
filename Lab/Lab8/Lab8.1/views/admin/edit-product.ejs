@@ -8,7 +8,7 @@
 
     <main>
         <form class="product-form" action='/admin/<%= editing==="true" ? "edit-product" : "add-product"%>' method="POST">
-            <input name="id" value="<%= product.id %>" type="hidden">
+            <input name="id" value='<%= product.id %>' type="hidden">
             <div class="form-control">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title" value='<%= editing === "true" ? product.title : "" %>'>
