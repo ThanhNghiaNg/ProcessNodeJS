@@ -5,7 +5,8 @@ const cors = require("cors");
 //routes
 const shopRoute = require("./routes/shop");
 const adminRoute = require("./routes/admin");
-const mongoConnect = require("./utils/database").mongoConnect;
+// const mongoConnect = require("./utils/database").mongoConnect;
+const mongoose = require("mongoose");
 
 const app = express();
 // accept json and text
@@ -16,7 +17,12 @@ app.use(cors());
 //use Routers
 app.use("/admin", adminRoute);
 app.use(shopRoute);
-
-mongoConnect((client) => {
-  app.listen(5000);
-});
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(
+    "mongodb+srv://owwibookstore:owwibookstore@cluster0.o5luvip.mongodb.net/TestProduct?retryWrites=true&w=majority"
+  )
+  .then((result) => {
+    app.listen(5000);
+  })
+  .catch((err) => console.log(err));
