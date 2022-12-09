@@ -1,16 +1,17 @@
 // MONGOOSE
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-  title:{type: String, require: true},
-  price: {type: Number, require: true},
-  imageUrl: {type: String, require: true},
-  description: {type: String, require: true}
-})
+  title: { type: String, require: true },
+  price: { type: Number, require: true },
+  imageUrl: { type: String, require: true },
+  description: { type: String, require: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", require: true },
+});
 
-module.exports = mongoose.model('Product', productSchema)
+module.exports = mongoose.model("Product", productSchema);
 
 // JSON
 // const fs = require("fs");
@@ -94,35 +95,35 @@ module.exports = mongoose.model('Product', productSchema)
 //       });
 //   }
 
-  // JSON
-  // save(cb) {
-  //   fs.readFile(p, (err, data) => {
-  //     if (!err) {
-  //       const product = {
-  //         id: Math.random(),
-  //         title: this.title,
-  //         imageUrl: this.imageUrl,
-  //         description: this.description,
-  //         price: this.price,
-  //       };
-  //       const products = [...JSON.parse(data), product];
-  //       fs.writeFile(p, JSON.stringify(products), (err) => {
-  //         console.log(err);
-  //       });
-  //       cb(products);
-  //     } else {
-  //       cb([]);
-  //     }
-  //   });
-  // }
-  // static fetchAll(cb) {
-  //   fs.readFile(p, (err, data) => {
-  //     if (!err) {
-  //       const products = JSON.parse(data);
-  //       cb(products);
-  //     } else {
-  //       cb([]);
-  //     }
-  //   });
-  // }
+// JSON
+// save(cb) {
+//   fs.readFile(p, (err, data) => {
+//     if (!err) {
+//       const product = {
+//         id: Math.random(),
+//         title: this.title,
+//         imageUrl: this.imageUrl,
+//         description: this.description,
+//         price: this.price,
+//       };
+//       const products = [...JSON.parse(data), product];
+//       fs.writeFile(p, JSON.stringify(products), (err) => {
+//         console.log(err);
+//       });
+//       cb(products);
+//     } else {
+//       cb([]);
+//     }
+//   });
+// }
+// static fetchAll(cb) {
+//   fs.readFile(p, (err, data) => {
+//     if (!err) {
+//       const products = JSON.parse(data);
+//       cb(products);
+//     } else {
+//       cb([]);
+//     }
+//   });
+// }
 // };

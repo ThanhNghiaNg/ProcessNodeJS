@@ -1,4 +1,4 @@
-import "./forms.css";
+import classes from "./forms.module.css";
 import { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { serverURL } from "../utils/global";
@@ -52,7 +52,7 @@ const AddProductForm = (props) => {
     return;
   };
   return (
-    <form className="form-control">
+    <form className={classes['form-control']}>
       <label>Title</label>
       <input type="text" ref={titleRef}></input>
 
