@@ -1,19 +1,51 @@
 const Product = require("../models/Product");
-const Cart = require("../models/Cart");
+const Order = require("../models/Order");
+
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 exports.showAllProducts = (req, res, next) => {
   Product.find().then((data) => {
-    console.log(data);
     res.send({ ok: true, products: data });
   });
 };
 
 exports.getCart = (req, res, next) => {
-  res.redirect("/cart");
+  req.user.populate("cart.items.productId").then((result) => {
+    return res.send(JSON.stringify(result.cart.items));
+  });
 };
 
 exports.postCart = (req, res, next) => {
   const product = req.body;
-  Cart.addProduct(product.id, product.price);
+  req.user.addToCart(product.id);
   res.send({ ok: true, product });
+};
+
+exports.postDeleteCart = (req, res, next) => {
+  const id = req.body.id;
+  req.user.removeFromCart(id).then((result) => {
+    res.send({ ok: true });
+  });
+};
+
+exports.postOrder = (req, res, next) => {
+  console.log("ORDER");
+  req.user.populate("cart.items.productId").then((result) => {
+    const products = result.cart.items.map((i) => {
+      return { product: i.productId._doc, quantity: i.quantity };
+    });
+    const order = new Order({
+      products: products,
+      user: { name: req.user.name, _id: req.user._id },
+    });
+    order
+      .save()
+      .then(() => {
+        return req.user.resetCart();
+      })
+      .then(() => {
+        res.send({});
+      });
+  });
 };
