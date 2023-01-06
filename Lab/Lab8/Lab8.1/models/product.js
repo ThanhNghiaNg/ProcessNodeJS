@@ -52,4 +52,15 @@ module.exports = class Product {
   static fetchAll(cb) {
     getProductsFromFile(cb);
   }
+
+  static deleteById(id, cb) {
+    getProductsFromFile((data) => {
+      const idx = data.findIndex((p) => Number(p.id) === Number(id));
+      const new_products = [...data];
+      new_products.splice(idx, 1);
+      fs.writeFile(p, JSON.stringify(new_products), (err) => {
+        cb(new_products);
+      });
+    });
+  }
 };

@@ -72,4 +72,11 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   const id = req.body.product_id;
   console.log(id);
+  Product.deleteById(id, (products)=>{
+    res.render("admin/products", {
+      prods: products,
+      pageTitle: "Admin Products",
+      path: "/admin/products",
+    });
+  })
 };

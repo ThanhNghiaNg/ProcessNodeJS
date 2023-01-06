@@ -3,6 +3,19 @@ const fs = require("fs");
 const p = path.join(process.mainModule.path, "data", "cart.json");
 
 module.exports = class Cart {
+  static fetchAllProduct(callback){
+    fs.readFile(p, (err, fileContent)=>{
+      if (!err){
+        const items = JSON.parse(fileContent)
+        callback(items)
+      }
+      else{
+        console.log(err)
+        callback([])
+      }
+    })
+  }
+
   static addProduct(id, price, cb) {
     const productPrice = Number(price);
     fs.readFile(p, (err, fileContent) => {
