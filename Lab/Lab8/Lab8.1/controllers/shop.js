@@ -22,12 +22,50 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  Cart.fetchAllProduct((items) => {
-    res.render("shop/cart", {
-      path: "/cart",
-      pageTitle: "Your Cart",
-      products: items,
-    });
+  Product.fetchAll((allProducts) => {
+    if (allProducts.length > 0) {
+      Cart.getCart((cart) => {
+        if (cart.products.length > 0) {
+          const products = cart.products.map((p) => {
+            return {
+              ...allProducts.filter(
+                (prod) => Number(prod.id) === Number(p.id)
+              )[0],
+              quantity: p.qty,
+            };
+          });
+
+          cart.products = [...products];
+          // console.log(cart);
+          res.render("shop/cart", {
+            path: "/cart",
+            pageTitle: "Your Cart",
+            cart: cart,
+          });
+        }
+        // Khi chưa có file cart.json
+        else {
+          res.render("shop/cart", {
+            path: "/cart",
+            pageTitle: "Your Cart",
+            cart: { products: [], totalPrice: 0 },
+          });
+        }
+      });
+    } else {
+      res.render("shop/cart", {
+        path: "/cart",
+        pageTitle: "Your Cart",
+        cart: { products: [], totalPrice: 0 },
+      });
+    }
+  });
+};
+
+exports.postCartDeleteProduct = (req, res, next) => {
+  const id = req.body.id;
+  Cart.deleteById(id, (cart) => {
+    this.getCart(req, res, next);
   });
 };
 

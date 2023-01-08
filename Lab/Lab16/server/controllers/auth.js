@@ -37,7 +37,7 @@ exports.postlogin = (req, res, next) => {
           req.session.user = user;
           req.session.save((err) => {
             console.log(err);
-            return res.status(200).send({ Message: "Login Successfully!"});
+            return res.status(200).send({ Message: "Login Successfully!" });
           });
         } else {
           return res
@@ -49,14 +49,14 @@ exports.postlogin = (req, res, next) => {
   });
 };
 
-exports.postLogout = (req, res, next)=>{
-    req.session.destroy(err=>{
-        if (!err){
-            return res.status(200).send({message: "Successfully Logout!"})
-        }
-        else{
-            console.log(err)
-            return res.status(403).send({message: "Logout Error"})
-        }
-    })
-}
+exports.postLogout = (req, res, next) => {
+  console.log(req);
+  req.session.destroy((err) => {
+    if (!err) {
+      return res.status(200).send({ message: "Successfully Logout!" });
+    } else {
+      console.log(err);
+      return res.status(403).send({ message: "Logout Error" });
+    }
+  });
+};

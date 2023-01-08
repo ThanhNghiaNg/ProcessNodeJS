@@ -4,7 +4,8 @@ const cors = require("cors");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
-const csrfProtection = csrf();
+const csrfProtection = csrf({ cookie: true });
+const cookieParser = require("cookie-parser");
 
 const URI =
   "mongodb+srv://owwibookstore:owwibookstore@cluster0.o5luvip.mongodb.net/TestProduct?retryWrites=true&w=majority";
@@ -42,7 +43,6 @@ app.use(
     store: store,
   })
 );
-app.use(csrfProtection);
 
 //
 // app.use((req, res, next) => {
@@ -63,11 +63,13 @@ app.use(csrfProtection);
 //use Routers
 
 // CSRF and Authentication for each page
-app.use((req, res, next) => {
-  res.locals.isLoggedIn = req.session.isLoggedIn;
-  res.locals.csrf = req.csrfToken();
-  next();
-});
+// app.use((req, res, next) => {
+//   res.locals.isLoggedIn = req.session.isLoggedIn;
+//   res.locals.csrf = req.csrfToken();
+//   next();
+// });
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use("/admin", adminRoute);
 app.use(authRoute);

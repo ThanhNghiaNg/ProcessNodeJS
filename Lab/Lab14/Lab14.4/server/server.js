@@ -30,6 +30,7 @@ app.use((req, res, next) => {
 
 //use Routers
 app.use("/admin", adminRoute);
+
 app.use(shopRoute);
 mongoose.set("strictQuery", false);
 mongoose

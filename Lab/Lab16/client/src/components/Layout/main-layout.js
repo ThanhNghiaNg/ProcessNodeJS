@@ -1,18 +1,29 @@
+import { useContext } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
 import { serverURL } from "../utils/global";
 import "./main.css";
 
 const Layout = (props) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const authCtx = useContext(AuthContext);
+  console.log(authCtx.csrfToken);
   const logoutHandler = (event) => {
+    console.log(authCtx.csrfToken);
     event.preventDefault();
     fetch(`${serverURL}/logout`, {
       method: "POST",
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "xsrf-token": authCtx.csrfToken,
+      },
+      mode: "cors",
+      body: JSON.stringify({ _csrf: authCtx.csrfToken }),
     })
       .then((result) => {
         if (result.ok) {
-          navigate('/login')
+          navigate("/login");
         }
         return result.json();
       })

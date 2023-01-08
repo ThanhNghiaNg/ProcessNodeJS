@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 exports.showAllProducts = (req, res, next) => {
   Product.find().then((data) => {
-    res.send({ ok: true, products: data });
+    res.send({ ok: true, products: data});
   });
 };
 

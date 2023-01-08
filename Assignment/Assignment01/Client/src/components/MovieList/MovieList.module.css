@@ -1,0 +1,33 @@
+.movie-list {
+  color: white;
+  margin-bottom: 6em;
+  max-height: 12em;
+  position: relative;
+  overflow-y: visible;
+}
+.movie-items {
+  display: flex;
+  overflow-x: scroll;
+  height: 100%;
+  gap: 1em;
+  padding-bottom: 1em;
+  overflow-y: hidden;
+}
+.img-poster {
+  height: 12em;
+  overflow-y: visible;
+}
+.img-backdrop {
+  height: 6em;
+  overflow-y: visible;
+}
+.movie-items::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: #292929; /* or add it to the track */
+}
+
+/* Add a thumb */
+.movie-items::-webkit-scrollbar-thumb {
+  background: #11171a;
+}

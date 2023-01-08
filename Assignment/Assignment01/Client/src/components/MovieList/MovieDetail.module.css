@@ -1,0 +1,43 @@
+.movie {
+  padding-top: 1em;
+}
+.img-movie {
+  height: 100%;
+}
+.img-grid {
+  width: 100%;
+  height: 100%;
+}
+
+.img-movie:hover, .img-grid:hover {
+  transform: scale(1.2);
+}
+
+
+.detail {
+  color: white;
+  width: 97%;
+  height: max-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+  position: absolute;
+  padding: 1em;
+  bottom: -4em;
+  left: 0;
+  background-color: var(--primary-background);
+  z-index: 3;
+  transform: translate(0, 100%);
+}
+.detail hr {
+  background-color: #fff;
+}
+.detail img {
+  width: 100%;
+}
+
+.grid-bottom{
+  width: 100%;
+  bottom: 0;
+  left: -1em;
+}

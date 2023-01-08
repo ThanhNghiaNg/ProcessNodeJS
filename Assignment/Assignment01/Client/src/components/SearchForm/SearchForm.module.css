@@ -1,0 +1,51 @@
+.form {
+  background-color: white;
+  max-width: 40%;
+  max-height: 10em;
+  margin: 5em auto;
+  border-radius: 4px;
+}
+.form hr {
+  background-color: #7fdaf2;
+  height: 1px;
+  margin-top: 0;
+}
+
+.input-controls {
+  display: flex;
+}
+.input-controls input {
+  border: none;
+  width: 100%;
+  outline: none;
+  padding: 1em 2em;
+}
+.input-controls button {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  padding: 0.2em 0.8em;
+}
+
+.search-icon {
+  width: 2em;
+  height: 2em;
+}
+
+.action-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2em;
+  padding: 2em;
+}
+.action-controls button{
+    background-color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5em 2em;
+}
+.high-light {
+  background-color: #00bbec!important;
+  color: white;
+}
