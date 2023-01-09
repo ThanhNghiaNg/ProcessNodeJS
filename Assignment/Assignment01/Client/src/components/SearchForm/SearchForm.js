@@ -2,6 +2,7 @@ import classes from "./SearchForm.module.css";
 import React, { useContext, useRef } from "react";
 import GlobalContext from "../../contexts/GlobalContext";
 import useHttp from "../../hooks/use-http";
+import { hostURL } from "../../utils/config";
 
 const SearchForm = (props) => {
   const globalContext = useContext(GlobalContext); // use Global context
@@ -15,10 +16,19 @@ const SearchForm = (props) => {
   // Function to handle user clicked search button
   const searchtHandler = (event) => {
     event.preventDefault(); // Prevent reload page when form submited
-    const urlSearch = `${globalContext.baseUrl}/search/movie?api_key=${globalContext.API_KEY}&language=en-US&query=${queryRef.current.value}&page=1&include_adult=false`; // url search base on user query
+    // const urlSearch = `${globalContext.baseUrl}/search/movie?api_key=${globalContext.API_KEY}&language=en-US&query=${queryRef.current.value}&page=1&include_adult=false`; // url search base on user query
+    const urlSearch = `${hostURL}/api/movies/search`;
     console.log(urlSearch);
     // Fetch data from url
-    getSearchResult({ url: urlSearch }, setSearchResultHandler);
+    getSearchResult(
+      {
+        url: urlSearch,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: { keyword: queryRef.current.value },
+      },
+      setSearchResultHandler
+    );
     // set state isTouch to true to confirm that user clicked Search button
     props.onClickedSearch(true);
   };

@@ -16,9 +16,10 @@ route.get("/discover/:genre", movieControllers.getMoviesByGenre);
 route.get("/discover/:genre/:page", movieControllers.getMoviesByGenre);
 
 // Get movie trailers
-route.get("/video", movieControllers.getMoviesTrailer);
-route.get("/video/:film_id", movieControllers.getMoviesTrailer);
+route.post("/video", movieControllers.postMoviesTrailer);
 
+// Get movies by query and params
+route.post('/search', movieControllers.postSearchMovies)
 
-
+// Export route
 module.exports = route

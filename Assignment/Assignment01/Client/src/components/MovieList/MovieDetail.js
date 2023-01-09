@@ -16,7 +16,10 @@ const MovieDetail = (props) => {
   useEffect(() => {
     getTrailerData(
       {
-        url: `${hostURL}/api/movies/video/${props.movie.id}`,
+        url: `${hostURL}/api/movies/video`,
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: {film_id: props.movie.id},
       },
       setTrailerData
     );
@@ -51,7 +54,6 @@ const MovieDetail = (props) => {
   );
   // If found trailer video, change videoContent
   if (trailerData.results && trailerData.results.length > 0) {
-
     videoContent = (
       <YouTube
         videoId={trailerData.results[0].key}

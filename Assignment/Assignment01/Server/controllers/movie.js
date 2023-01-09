@@ -21,14 +21,14 @@ exports.getMoviesTopRated = (req, res, next) => {
 exports.getMoviesByGenre = (req, res, next) => {
   const genreId = req.params.genre;
   if (!genreId) {
-    return res.status(400).send({ message: "Not found gerne parram" });
+    // return error message when user do not pass a genre param
+    return res.status(400).send({ message: "Not found gerne param" });
   }
   const page = req.params.page ? Number(req.params.page) : 1;
-  console.log(genreId, page);
   const allMovies = Movie.all().filter((movie) =>
     movie.genre_ids.includes(Number(genreId))
   );
-  // Nếu người dùng truyền vào một gerne id không có trong danh sách => không có movies được trả về
+  // return error message do not find movies matched with the genre param
   if (allMovies.length === 0) {
     return res.status(400).send({ message: "Not found that gerne id" });
   }
@@ -36,8 +36,8 @@ exports.getMoviesByGenre = (req, res, next) => {
 };
 
 // GET MOVIE TRAILERS
-exports.getMoviesTrailer = (req, res, next) => {
-  const film_id = req.params.film_id;
+exports.postMoviesTrailer = (req, res, next) => {
+  const film_id = req.body.film_id;
   if (!film_id) {
     return res.status(400).send({ message: "Not found film_id parram" });
   }
@@ -65,13 +65,29 @@ exports.getMoviesTrailer = (req, res, next) => {
         .status(200)
         .send({ id: Number(film_id), results: [trailers[0]] });
     }
+
+    // return the latest teaser if do not exist any official youtube trailer
     if (teasers.length > 0) {
       return res
         .status(200)
         .send({ id: Number(film_id), results: [teasers[0]] });
     }
   } else {
-    // return error message when do not find any trailer or teaser
+    // return error message when do not find any official youtube trailer or teaser
     return res.status(404).send({ message: "Not found video" });
   }
+};
+
+exports.postSearchMovies = (req, res, next) => {
+  const keyword = req.body.keyword;
+  const page = req.params.page? req.params.page : 1;
+  const allMovies = Movie.all();
+  const result = allMovies.filter(
+    (movie) =>
+      {
+        return (movie.overview && movie.overview.toLowerCase().includes(keyword.toLowerCase())) ||
+        (movie.title && movie.title.toLowerCase().includes(keyword.toLowerCase()))
+      }
+  );
+  res.status(200).send(getPage(page, result));
 };

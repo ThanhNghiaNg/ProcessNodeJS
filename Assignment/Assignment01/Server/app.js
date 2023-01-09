@@ -11,6 +11,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json());
 
 // use movie routes 
 app.use('/api/movies',movieRoutes);

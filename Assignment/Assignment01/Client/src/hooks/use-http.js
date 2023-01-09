@@ -14,6 +14,7 @@ const useHttp = () => {
         throw new Error("Cannot fetching data!");
       }
       const data = await respone.json();
+      console.log(data)
       applyData(data);
     } catch (err) {
       console.log(`--ERROR: ${err}`);
