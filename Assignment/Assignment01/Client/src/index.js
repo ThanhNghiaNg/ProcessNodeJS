@@ -10,7 +10,8 @@ ReactDOM.render(
     <GlobalProvider>
       <App />
     </GlobalProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
+  ,
   document.getElementById("root")
 );
 

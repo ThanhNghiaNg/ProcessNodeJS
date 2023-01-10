@@ -1,25 +1,26 @@
-const express = require("express")
-const route = express.Router()
-const movieControllers = require('../controllers/movie')
+const express = require("express");
+const route = express.Router();
+const isAuth = require("../middleware/is_auth");
+const movieControllers = require("../controllers/movie");
 
-// Get trending movies 
-route.get("/trending", movieControllers.getMoviesTrending);
-route.get("/trending/:page", movieControllers.getMoviesTrending);
+// Get trending movies
+route.get("/trending", isAuth, movieControllers.getMoviesTrending);
+route.get("/trending/:page", isAuth, movieControllers.getMoviesTrending);
 
-// Get top rated movies 
-route.get("/top-rate", movieControllers.getMoviesTopRated);
-route.get("/top-rate/:page", movieControllers.getMoviesTopRated);
+// Get top rated movies
+route.get("/top-rate", isAuth, movieControllers.getMoviesTopRated);
+route.get("/top-rate/:page", isAuth, movieControllers.getMoviesTopRated);
 
 // Get movies by genre
-route.get("/discover", movieControllers.getMoviesByGenre);
-route.get("/discover/:genre", movieControllers.getMoviesByGenre);
-route.get("/discover/:genre/:page", movieControllers.getMoviesByGenre);
+route.get("/discover", isAuth, movieControllers.getMoviesByGenre);
+route.get("/discover/:genre", isAuth, movieControllers.getMoviesByGenre);
+route.get("/discover/:genre/:page", isAuth, movieControllers.getMoviesByGenre);
 
 // Get movie trailers
-route.post("/video", movieControllers.postMoviesTrailer);
+route.post("/video", isAuth, movieControllers.postMoviesTrailer);
 
 // Get movies by query and params
-route.post('/search', movieControllers.postSearchMovies)
+route.post("/search", isAuth, movieControllers.postSearchMovies);
 
 // Export route
-module.exports = route
+module.exports = route;

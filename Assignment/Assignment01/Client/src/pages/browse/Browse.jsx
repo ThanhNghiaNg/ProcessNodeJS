@@ -4,7 +4,7 @@ import Banner from "../../components/Banner/Banner";
 import MovieList from "../../components/MovieList/MovieList";
 import GlobalContext from "../../contexts/GlobalContext";
 import Footer from "../../components/Footer/Footer";
-import {hostURL} from '../../utils/config'
+import { hostURL } from "../../utils/config";
 
 function Browse() {
   const globalContext = useContext(GlobalContext);
@@ -13,15 +13,14 @@ function Browse() {
       <Navbar />
       <Banner />
       <MovieList
-        moviesURL={`${hostURL}/api/movies/trending`}
-        caption={"Xu hướng"}
-      />
-      <MovieList
         moviesURL={`${globalContext.baseUrl}${globalContext.requests.fetchNetflixOriginals}`}
         caption={""}
         usePoster={true}
       />
-      
+      <MovieList
+        moviesURL={`${hostURL}/api/movies/trending`}
+        caption={"Xu hướng"}
+      />
       <MovieList
         moviesURL={`${hostURL}/api/movies/top-rate`}
         caption={"Xếp hạng cao"}

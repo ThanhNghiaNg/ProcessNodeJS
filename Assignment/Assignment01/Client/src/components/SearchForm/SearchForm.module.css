@@ -1,7 +1,7 @@
 .form {
   background-color: white;
   max-width: 40%;
-  max-height: 10em;
+  max-height: fit-content;
   margin: 5em auto;
   border-radius: 4px;
 }
@@ -38,14 +38,15 @@
   gap: 2em;
   padding: 2em;
 }
-.action-controls button{
-    background-color: white;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5em 2em;
+.action-controls button {
+  background-color: white;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5em 2em;
 }
 .high-light {
-  background-color: #00bbec!important;
+  background-color: #00bbec !important;
   color: white;
 }
+

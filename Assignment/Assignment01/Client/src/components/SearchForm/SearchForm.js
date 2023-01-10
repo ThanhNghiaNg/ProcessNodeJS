@@ -3,29 +3,37 @@ import React, { useContext, useRef } from "react";
 import GlobalContext from "../../contexts/GlobalContext";
 import useHttp from "../../hooks/use-http";
 import { hostURL } from "../../utils/config";
+import Filters from "./Filters";
 
 const SearchForm = (props) => {
   const globalContext = useContext(GlobalContext); // use Global context
   const queryRef = useRef(); // State to store user query
   const { error, sendRequest: getSearchResult } = useHttp();
+  const filterRef = useRef(null);
 
   // Function to set Search result in Search.jsx
   const setSearchResultHandler = (data) => {
     props.onSetResult(data.results);
+  };
+
+  // Reset input state from filters
+  const resetHandler = () => {
+    filterRef.current.resetFilters();
   };
   // Function to handle user clicked search button
   const searchtHandler = (event) => {
     event.preventDefault(); // Prevent reload page when form submited
     // const urlSearch = `${globalContext.baseUrl}/search/movie?api_key=${globalContext.API_KEY}&language=en-US&query=${queryRef.current.value}&page=1&include_adult=false`; // url search base on user query
     const urlSearch = `${hostURL}/api/movies/search`;
-    console.log(urlSearch);
+    const { genre, mediaType, language, year } =
+      filterRef.current.getFilterValues();
     // Fetch data from url
     getSearchResult(
       {
         url: urlSearch,
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: { keyword: queryRef.current.value },
+        body: { keyword: queryRef.current.value, genre, mediaType, language, year},
       },
       setSearchResultHandler
     );
@@ -52,8 +60,11 @@ const SearchForm = (props) => {
         </button>
       </div>
       <hr></hr>
+      <Filters ref={filterRef} />
       <div className={classes["action-controls"]}>
-        <button type="reset">Reset</button>
+        <button type="reset" onClick={resetHandler}>
+          Reset
+        </button>
         <button type="submit" className={classes["high-light"]}>
           Search
         </button>

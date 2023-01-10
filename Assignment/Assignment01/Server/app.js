@@ -11,6 +11,7 @@ app.use(
     credentials: true,
   })
 );
+// use express json to get json type from front-end react
 app.use(express.json());
 
 // use movie routes 
@@ -22,4 +23,4 @@ app.use((req, res, next)=>{
 })
 
 // start server listen on port 3001
-app.listen(3001);
+app.listen(5000);
