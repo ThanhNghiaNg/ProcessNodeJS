@@ -3,7 +3,7 @@ import { USER_TOKEN01, USER_TOKEN02 } from "../utils/config";
 const useHttp = () => {
   const [error, setError] = useState(false);
   const sendRequest = useCallback(async (requestConfig, applyData) => {
-    const baseHeaders = { Authorization: USER_TOKEN02 }
+    const baseHeaders = { Authorization: USER_TOKEN01 }
     try {
       const respone = await fetch(requestConfig.url, {
         method: requestConfig.method ? requestConfig.method : "GET",

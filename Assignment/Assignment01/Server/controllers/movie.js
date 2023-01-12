@@ -21,20 +21,24 @@ exports.getMoviesTopRated = (req, res, next) => {
 // GET MOVIES BY GENRE
 exports.getMoviesByGenre = (req, res, next) => {
   const genreId = req.params.genre;
+  // Get genre name by genre id
+  const genreName = Genre.all().filter(
+    (genre) => genre.id === Number(genreId)
+  )[0];
+  // return error message when user do not pass a genre param
   if (!genreId) {
-    // return error message when user do not pass a genre param
     return res.status(400).send({ message: "Not found gerne param" });
+  }
+  // return error message when user pass an invalid genre id param
+  if (!genreName) {
+    return res.status(400).send({ message: "Not found that gerne id" });
   }
   const page = req.params.page ? Number(req.params.page) : 1; // default page is 1 if do not defined
   // get all movies include genre id
   const allMovies = Movie.all().filter((movie) =>
     movie.genre_ids.includes(Number(genreId))
   );
-  // return error message do not find movies matched with the genre param
-  if (allMovies.length === 0) {
-    return res.status(400).send({ message: "Not found that gerne id" });
-  }
-  return res.status(200).send(getPageGenre(page, allMovies, genreId));
+  return res.status(200).send(getPage(page, allMovies, genreName));
 };
 
 // GET MOVIE TRAILERS
@@ -60,8 +64,8 @@ exports.postMoviesTrailer = (req, res, next) => {
       .filter((v) => v.type === "Teaser")
       .sort((v1, v2) => (v1.published_at > v2.published_at ? -1 : 1));
 
+    // return error message when do not find any trailer or teaser
     if (trailers.length === 0 && teasers.length === 0) {
-      // return error message when do not find any trailer or teaser
       return res.status(404).send({ message: "Not found video" });
     }
     // return the latest trailer
@@ -87,7 +91,10 @@ exports.postSearchMovies = (req, res, next) => {
   const page = req.params.page ? req.params.page : 1; // set default page is 1 if page param undefined
   const keyword = req.body.keyword;
   const { genre, mediaType, language, year } = req.body;
-
+  // return error message when user do not pass keyword param (undefined not empty string '')
+  if (!keyword && keyword !== "") {
+    return res.status(400).send({ message: "Not found keyword parram" });
+  }
   const allMovies = Movie.all();
   const genres = Genre.all();
   const result = allMovies.filter((movie) => {
