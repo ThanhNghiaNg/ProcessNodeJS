@@ -1,0 +1,19 @@
+.detail {
+  text-align: center;
+}
+
+.detail img {
+  width: 100%;
+}
+
+.info {
+  margin: auto;
+  width: 40%;
+  max-width: 30rem;
+}
+
+.detail .price{
+    font-weight: bold;
+    margin-block: 1rem;
+    font-size: 24px;
+}

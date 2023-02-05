@@ -1,0 +1,6 @@
+const DATA_KEY = "DATA_KEY";
+const SUPPLIER = "SUPPLIER";
+const CONSUMER = "CONSUMER";
+const ITEMS = "ITEMS";
+
+export { DATA_KEY, SUPPLIER, CONSUMER, ITEMS };

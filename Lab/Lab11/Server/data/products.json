@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "A Book",
+    "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg",
+    "description": "This is an awesome book!",
+    "price": "19"
+  },
+  {
+    "id": 2,
+    "title": "The Jungle Book",
+    "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTc3NTUzNTI4MV5BMl5BanBnXkFtZTgwNjU0NjU5NzE@._V1_.jpg",
+    "description": "The Jungle Book Description",
+    "price": "315"
+  },
+  {
+    "id": 0.9920178882434814,
+    "title": "1",
+    "imageUrl": "2",
+    "description": "4",
+    "price": "3"
+  }
+]

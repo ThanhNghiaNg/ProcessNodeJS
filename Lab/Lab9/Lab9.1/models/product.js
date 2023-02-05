@@ -31,9 +31,11 @@ module.exports = class Product {
   }
 
   static fetchAll(){
-    return db.execute("select * from ")
+    return db.execute("select * from books")
   }
-
+  static findById(id) {
+    return db.execute('SELECT * FROM products WHERE products.id = ?', [id]);
+  }
   // save() {
   //   getProductsFromFile((products) => {
   //     products.push(this);
