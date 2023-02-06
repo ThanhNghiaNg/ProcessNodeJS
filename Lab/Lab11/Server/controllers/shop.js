@@ -16,7 +16,6 @@ exports.getProductById = (req, res, next) => {
   //   return res.send(data);
   // });
 
-  
   // if (id) {
   //   Product.findById(id).then((data) => {
   //     return res.send(data);
@@ -28,7 +27,34 @@ exports.getProductById = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const product = req.body;
-  Cart.addProduct(product.id, product.price, (cart) => {
-    res.send(JSON.stringify({ cart }));
+  console.log(product.id);
+  Cart.findAll({ where: { productId: product.id } }).then((products) => {
+    const prod = products[0];
+    if (!prod) {
+      console.log("Empty");
+      return Cart.create({ productId: product.id, quantity: 1 })
+        .then((result) => res.send(result))
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      prod.quantity = prod.quantity + 1;
+      return prod.save().then((result) => res.send(result));
+    }
   });
+};
+
+exports.getCart = async (req, res, next) => {
+  const items = await Cart.findAll();
+  const productIds = items.map((item) => item.productId);
+  const products = await Promise.all(
+    productIds.map((id) => Product.findByPk(id))
+  );
+  const combined = products.map((product, index) => {
+    return {
+      ...product.dataValues,
+      quantity: items[index].quantity,
+    };
+  });
+  return res.send(combined);
 };
