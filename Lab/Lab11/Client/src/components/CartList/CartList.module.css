@@ -1,0 +1,12 @@
+.cart{
+    width: 50%;
+    margin: 1rem auto;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    text-align: center;
+}
+
+.order-btn{
+    margin: 1rem auto;
+}

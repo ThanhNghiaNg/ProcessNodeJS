@@ -1,0 +1,19 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  border-bottom: #ccc solid 2px;
+}
+.item button {
+  background-color: #fff;
+  border: solid 2px orangered;
+  color: red;
+  padding: 0.25rem 1rem;
+  border-radius: 6px;
+}
+.item button:hover {
+  background-color: red;
+  border: solid 2px #fff;
+  color: #fff;
+}

@@ -26,35 +26,115 @@ exports.getProductById = (req, res, next) => {
 };
 
 exports.postCart = (req, res, next) => {
-  const product = req.body;
-  console.log(product.id);
-  Cart.findAll({ where: { productId: product.id } }).then((products) => {
-    const prod = products[0];
-    if (!prod) {
-      console.log("Empty");
-      return Cart.create({ productId: product.id, quantity: 1 })
-        .then((result) => res.send(result))
-        .catch((err) => {
-          console.log(err);
+  // const product = req.body;
+  const productId = req.body.id;
+  let newQuantity = 1;
+  let fetchedCart;
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts({ where: { id: productId } });
+    })
+    .then((products) => {
+      let product;
+
+      if (products.length > 0) {
+        product = products[0];
+      }
+      if (product) {
+        newQuantity = product.cartItem.quantity + 1;
+        return product;
+      }
+      return Product.findByPk(productId);
+    })
+    .then((product) => {
+      return fetchedCart
+        .addProduct(product, {
+          through: { quantity: newQuantity },
+        })
+        .then((result) => {
+          res.send(result);
         });
-    } else {
-      prod.quantity = prod.quantity + 1;
-      return prod.save().then((result) => res.send(result));
-    }
-  });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.getCart = async (req, res, next) => {
-  const items = await Cart.findAll();
-  const productIds = items.map((item) => item.productId);
-  const products = await Promise.all(
-    productIds.map((id) => Product.findByPk(id))
-  );
-  const combined = products.map((product, index) => {
-    return {
-      ...product.dataValues,
-      quantity: items[index].quantity,
-    };
+  req.user.getCart().then((cart) => {
+    return cart.getProducts().then((products) => {
+      return res.send(products);
+    });
   });
-  return res.send(combined);
+};
+
+exports.deleteCartItem = (req, res, next) => {
+  const productId = req.body.id;
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts({ where: { id: productId } });
+    })
+    .then((products) => {
+      const product = products[0];
+      return product.cartItem.destroy();
+    })
+    .then((result) => {
+      res.send(result);
+    });
+};
+
+exports.postOrder = (req, res, next) => {
+  let fetchedCart;
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return req.user
+        .createOrder()
+        .then((order) => {
+          return order.addProducts(
+            products.map((product) => {
+              product.orderItem = { quantity: product.cartItem.quantity };
+              return product;
+            })
+          );
+        })
+        .catch((err) => console.log(err));
+    })
+    .then((result) => {
+      return fetchedCart.setProducts(null);
+    })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.getOrders = (req, res, next) => {
+  let items = [];
+  req.user
+    .getOrders()
+    .then((orders) => {
+      Promise.all(
+        orders.map((order) => {
+          return order.getProducts().then((products) => {
+            items.push({
+              orderId: order.id,
+              items: products,
+            });
+          });
+        })
+      ).then(() => {
+        res.send(items);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

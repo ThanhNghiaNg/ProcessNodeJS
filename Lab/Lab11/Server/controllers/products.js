@@ -2,9 +2,11 @@ const Product = require("../models/Product");
 
 exports.addProduct = (req, res, next) => {
   const { title, imageUrl, description, price } = req.body;
-  Product.create({ title, imageUrl, description, price }).then((data) => {
-    return res.send(data);
-  });
+  req.user
+    .createProduct({ title, imageUrl, description, price })
+    .then((data) => {
+      return res.send(data);
+    });
   // product.save((data) => {
   //   if (data.length > 0) {
   //     res.send({ ok: true, data });
