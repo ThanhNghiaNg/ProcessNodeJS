@@ -1,0 +1,42 @@
+.search-popup {
+  padding: 1em;
+  background-color: #febb02;
+  z-index: 3;
+  overflow: visible;
+}
+.search-popup h4 {
+  font-weight: bold;
+  color: #495057;
+}
+.input-item-popup {
+  display: flex;
+  flex-direction: column;
+}
+.input-item input {
+  height: 3em;
+}
+.input-item label {
+  font-weight: bold;
+}
+.option-input-item {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  margin: 1em;
+  position: relative;
+}
+.option-input-item label {
+  font-weight: normal;
+  font-size: small;
+}
+.option-input-item input {
+  width: 30%;
+  height: 1.5em;
+}
+#check-in-date{
+  position: relative;
+  z-index: 3;
+}
+.search-popup .btn-search-popup {
+  width: 100%;
+}

@@ -1,0 +1,59 @@
+.detail-body {
+  margin-top: 2em;
+  position: relative;
+}
+.detail-body .btn-book-top-right{
+    position: absolute;
+    padding: 0.5em 2em;
+    top:0;
+    right:8em;
+    transform: translate(0,50%);
+    font-weight: bold;
+}
+.detail-body h2 {
+  font-weight: bold;
+}
+.detail-body span {
+  margin-right: 1em;
+}
+.detail-body .detail-hotel-distance {
+  color: #0071c2;
+}
+.detail-body .detail-hotel-price {
+  color: #13823b;
+}
+.detail-body .more-info {
+  display: flex;
+  gap: 1em;
+  margin-top: 2em;
+}
+.more-info .text-description {
+  width: 75%;
+}
+.more-info .text-description h2{
+  margin-bottom: 1em;
+}
+
+.more-info .book-description {
+  width: 25%;
+  background-color: #ebf3ff;
+  padding: 1.5em;
+}
+.book-description h5{
+    color: #575555;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.book-description .price-nine-nights h2:first-child {
+  display: inline;
+}
+.book-description .price-nine-nights h2:last-child {
+  font-weight: normal;
+  display: inline;
+}
+
+.book-description .btn-book{
+    margin-top: 1em;
+    width: 100%;
+    font-weight: bold;
+}

@@ -1,0 +1,17 @@
+.content-hotel-type-item {
+  border-radius: 18px;
+  overflow: hidden;
+  width: 100%;
+}
+.content-hotel-type-item img {
+  height: 60%;
+  width: 100%;
+}
+.content-hotel-type-item h5 {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #495057;
+}
+.content-hotel-type-item h6 {
+  color: #808080;
+}

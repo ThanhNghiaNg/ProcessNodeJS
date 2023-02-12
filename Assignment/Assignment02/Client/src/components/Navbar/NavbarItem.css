@@ -1,0 +1,19 @@
+.navbar-item {
+  margin-right: 2em;
+  padding: 0.4em 0.8em;
+}
+a{
+  text-decoration: none;
+  color: #fff!important;
+}
+a:hover{
+  transform: scale(1.2);
+  color: #99e9f2!important;
+}
+.navbar-item.active {
+  border-radius: 18px;
+  border: solid 1px #fff;
+}
+.navbar-item label {
+  margin-left: 0.5em;
+}
