@@ -1,9 +1,10 @@
 import classes from "./BookingForm.module.css";
 import DataRangeCom from "../Header/DataRangeCom";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import Button from "../UI/Button";
 import useHttp from "../../hooks/useHttp";
 import { serverURL } from "../../utils/global";
+import AuthContext from "../../store/AuthContext";
 
 function dateStringDiff(date1, date2) {
   const convert = (dateString) =>
@@ -14,6 +15,8 @@ function dateStringDiff(date1, date2) {
 }
 
 function BookingForm(props) {
+  const hotel = props.data;
+  const authCtx = useContext(AuthContext);
   // Popup Daterange picker
   const options = [
     "vi-VN",
@@ -23,9 +26,10 @@ function BookingForm(props) {
   const emailRef = useRef();
   const phoneRef = useRef();
   const cardNumberRef = useRef();
-  const [rooms, setRooms] = useState(props.data.rooms);
+  const [rooms, setRooms] = useState(hotel.rooms);
   const [selectedRooms, setSelectedRooms] = useState([]);
-  const { sendRequest: getAvailableRooms } = useHttp();
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const { sendRequest } = useHttp();
 
   const [[dateStartVal, dateEndVal, dateRange], setDateRanges] = useState([
     new Date().toLocaleString(...options),
@@ -39,13 +43,19 @@ function BookingForm(props) {
     ],
   ]);
 
+  // calculate totalBill base on number of day and room selected
+  const totalBill = selectedRooms.reduce((acc, room) => {
+    return acc + room.price * (dateStringDiff(dateStartVal, dateEndVal) + 1);
+  }, 0);
+
   useEffect(() => {
-    getAvailableRooms(
+    // Get available rooms for today
+    sendRequest(
       {
         url: `${serverURL}/available-rooms`,
         method: "POST",
         body: {
-          hotelId: props.data._id,
+          hotelId: hotel._id,
           startDate: dateStartVal,
           endDate: dateEndVal,
         },
@@ -74,6 +84,59 @@ function BookingForm(props) {
     }
   };
 
+  // handle changing payment method
+  const changePaymentMethodHandler = (event) => {
+    setPaymentMethod(event.target.value);
+  };
+
+  // handle reserve rooms
+  const reserveHandler = (event) => {
+    event.preventDefault();
+    if (!fullNameRef.current.value) {
+      return alert("Please fill out your name!");
+    }
+    if (!emailRef.current.value) {
+      return alert("Please fill out your email!");
+    }
+    if (!phoneRef.current.value) {
+      return alert("Please fill out your phone number!");
+    }
+    if (!cardNumberRef.current.value) {
+      return alert("Please fill out your Identity Card number!");
+    }
+    if (selectedRooms.length === 0) {
+      return alert("Please select your room!");
+    }
+    if (!paymentMethod) {
+      return alert("Please select your payment method!");
+    }
+
+    return sendRequest(
+      {
+        url: `${serverURL}/create-transaction`,
+        method: "POST",
+        body: {
+          hotelId: hotel._id,
+          rooms: selectedRooms,
+          date: { startDate: dateStartVal, endDate: dateEndVal },
+          paymentMethod: paymentMethod,
+          user: {
+            id: authCtx.userId,
+            user: fullNameRef.current.value,
+            email: emailRef.current.value,
+            phone: phoneRef.current.value,
+            cardNumber: cardNumberRef.current.value,
+          },
+          price: totalBill,
+        },
+      },
+      (data) => {
+        console.log(data);
+      }
+    );
+  };
+
+  // room list element
   const roomListContent = rooms.map((room) => {
     return (
       <div className={classes["room-item"]} key={room._id}>
@@ -103,13 +166,7 @@ function BookingForm(props) {
       </div>
     );
   });
-  const totalBill = selectedRooms.reduce((acc, room) => {
-    console.log(room.price);
-    return acc + room.price * (dateStringDiff(dateStartVal, dateEndVal) + 1);
-  }, 0);
-  const reserveHandler = (event) => {
-    event.preventDefault();
-  };
+
   return (
     <form className={classes.form}>
       <div className={classes["top-side"]}>
@@ -167,7 +224,12 @@ function BookingForm(props) {
       </div>
       <h3>Total Bill: ${totalBill}</h3>
       <div className={classes.payment}>
-        <select name="payment" id="payment" className="bg-light">
+        <select
+          name="payment"
+          id="payment"
+          className="bg-light"
+          onChange={changePaymentMethodHandler}
+        >
           <option value="">Select Payment Method</option>
           <option value="Cash">Cash</option>
           <option value="Credit Card">Credit Card</option>

@@ -3,6 +3,7 @@ const Room = require("../models/Room");
 const Transaction = require("../models/Transaction");
 const fs = require("fs");
 const path = require("path");
+const convertStrToDate = require("../utils/global").convertStrToDate;
 
 // get image
 exports.getImages = (req, res, next) => {
@@ -41,7 +42,6 @@ exports.getNumberHotelByCity = (req, res, next) => {
 // Get the number of hotel by type
 exports.getNumberHotelByType = (req, res, next) => {
   const typeListRequested = req.body.types;
-  console.log(typeListRequested);
   const initResult = typeListRequested.map((type) => {
     return {
       name: type,
@@ -129,7 +129,6 @@ exports.getSearchResult = (req, res, next) => {
         })
       ).then((hotels) => {
         // Find hotel appropriate with require
-        // console.log(hotels)
         const result = hotels.filter((hotel) => {
           return hotel.rooms.length >= room && hotel.city === destination;
         });
@@ -143,7 +142,62 @@ exports.getHotel = (req, res, next) => {
   Hotel.findOne({ _id: id })
     .populate("rooms")
     .then((hotel) => {
-      console.log(hotel);
       res.send(hotel);
     });
+};
+
+exports.getAvailableRooms = (req, res, next) => {
+  const hotelId = req.body.hotelId;
+  const startDate = convertStrToDate(req.body.startDate, "/");
+  const endDate = convertStrToDate(req.body.endDate, "/");
+
+  Hotel.findOne({ _id: hotelId })
+    .populate("rooms")
+    .then((hotel) => {
+      Transaction.find({ hotel: hotelId }).then((transactions) => {
+        if (transactions.length > 0) {
+          // Otherwise, keep room numbers that are not in transactions or not conflict date
+          transactions.forEach((transaction) => {
+            hotel.rooms = hotel.rooms.map((type) => {
+              type.roomNumbers = type.roomNumbers.filter((roomNumber) => {
+                console.log(transaction.dateStart, transaction.dateEnd);
+                console.log(startDate, endDate);
+                console.log("------");
+                return (
+                  !transaction.rooms.includes(roomNumber) ||
+                  transaction.dateEnd.getDate() < startDate.getDate() ||
+                  transaction.dateStart.getDate() > endDate.getDate()
+                );
+              });
+              return type;
+            });
+          });
+        }
+        return hotel.rooms;
+      });
+    });
+};
+
+exports.postTransaction = (req, res, next) => {
+  const hotelId = req.body.hotelId;
+  const rooms = req.body.rooms;
+  const date = req.body.date;
+  const paymentMethod = req.body.paymentMethod;
+  const user = req.body.user;
+  const price = req.body.price;
+
+  const transaction = new Transaction({
+    user: user.id,
+    hotel: hotelId,
+    rooms: rooms.map((room) => room.roomNumber),
+    dateStart: convertStrToDate(date.startDate, "/"),
+    dateEnd: convertStrToDate(date.endDate, "/"),
+    price,
+    payment: paymentMethod,
+    status: "Booked",
+  });
+
+  return transaction.save().then((result) => {
+    res.status(200).send({ nessage: "Created transaction!" });
+  });
 };

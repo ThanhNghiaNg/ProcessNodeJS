@@ -8,9 +8,13 @@ route.use("/number-hotel-by-type", bookingControllers.getNumberHotelByType);
 
 route.use("/top-rating-hotel", bookingControllers.getTopRatingHotel);
 
-route.get("/search", bookingControllers.getSearchResult)
+route.get("/search", bookingControllers.getSearchResult);
 
-route.get('/hotel/:id', bookingControllers.getHotel)
+route.get("/hotel/:id", bookingControllers.getHotel);
+
+route.use("/available-rooms", bookingControllers.getAvailableRooms);
+
+route.post("/create-transaction", bookingControllers.postTransaction);
 
 route.get("/images", bookingControllers.getImages);
 
