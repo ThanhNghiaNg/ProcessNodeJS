@@ -153,13 +153,19 @@ exports.deleteRoom = (req, res, next) => {
   Transaction.find()
     .populate({ path: "hotel", populate: { path: "rooms" } })
     .then((transactions) => {
-      const transactionHaveRoomType = transactions.map((transaction) => {
-        if (transaction.hotel.rooms.includes(roomId)) {
-          return transaction;
-        }
+      transactions.forEach((transaction) => {
+        const roomNumber = transaction.hotel.rooms.reduce((acc, room, idx) => {
+          return acc.concat(room.roomNumbers);
+        }, []);
+        const SetRowNumber = new Set(roomNumber);
+        Room.findById(roomId).then((room) => {
+          console.log(SetRowNumber);
+          const pickedRoom = room.roomNumbers.filter((number) =>
+            SetRowNumber.has(number)
+          );
+          console.log(pickedRoom);
+        });
       });
-      return res.send(transactionHaveRoomType);
-      console.log(transactionHaveRoomType);
     });
   // Room.findByIdAndDelete(roomId)
   //   .then((doc) => {
