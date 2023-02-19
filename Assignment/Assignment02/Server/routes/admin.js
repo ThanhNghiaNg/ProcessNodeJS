@@ -11,4 +11,6 @@ route.post("/delete-hotel", adminControllers.deleteHotel);
 
 route.get("/rooms", adminControllers.getRooms);
 
+route.post("/delete-room", adminControllers.deleteRoom);
+
 module.exports = route;

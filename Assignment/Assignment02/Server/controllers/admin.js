@@ -66,13 +66,22 @@ exports.getHotels = (req, res, next) => {
 // Handle delete hotel
 exports.deleteHotel = (req, res, next) => {
   const hotelId = req.body.hotelId;
-  return Hotel.deleteOne({ _id: hotelId })
-    .then(() => {
-      return res.send({ message: "Deleted document" });
-    })
-    .catch((err) => {
-      console.log(err);
+  console.log(req.url);
+  console.log(hotelId);
+  return Hotel.findById(hotelId).then((hotel) => {
+    Transaction.find({ hotel: hotelId }).then((transactions) => {
+      if (transactions.length > 0) {
+        return res.status(451).send({
+          message:
+            "Cannot Delete Hotel!\nHotel already have at least one transaction!",
+        });
+      } else {
+        Hotel.findByIdAndDelete(hotelId).then(() => {
+          return res.send({ message: "Deleted hotel." });
+        });
+      }
     });
+  });
 };
 
 // Handle add hotel
@@ -139,14 +148,26 @@ exports.getRooms = (req, res, next) => {
 // Handle delete rooms
 exports.deleteRoom = (req, res, next) => {
   // Chưa có điều kiện, xem lại đề
-  const roomId = req.params.roomId;
-  Room.findByIdAndDelete(roomId)
-    .then((doc) => {
-      res.send({ message: "Deleted document", doc });
-    })
-    .catch((err) => {
-      console.log(err);
+  const roomId = req.body.roomId;
+  console.log(roomId);
+  Transaction.find()
+    .populate({ path: "hotel", populate: { path: "rooms" } })
+    .then((transactions) => {
+      const transactionHaveRoomType = transactions.map((transaction) => {
+        if (transaction.hotel.rooms.includes(roomId)) {
+          return transaction;
+        }
+      });
+      return res.send(transactionHaveRoomType);
+      console.log(transactionHaveRoomType);
     });
+  // Room.findByIdAndDelete(roomId)
+  //   .then((doc) => {
+  //     res.send({ message: "Deleted document", doc });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
 // Handle add rooms

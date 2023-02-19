@@ -6,8 +6,7 @@ const roomSchema = new Schema({
   price: { type: Number, require: true },
   maxPeople: { type: Number, require: true },
   desc: { type: String, require: true },
-  roomNumbers: { type: Object, require: true },
-  hotel: {type: Schema.Types.ObjectId, require: "true", ref: "Hotel"}
+  roomNumbers: { type: Object, require: true }
 });
 
 module.exports = mongoose.model("Room", roomSchema);

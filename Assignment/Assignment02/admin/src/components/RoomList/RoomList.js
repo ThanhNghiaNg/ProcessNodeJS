@@ -5,12 +5,16 @@ import { Link } from "react-router-dom";
 import Table from "../Table/Table";
 import Card from "../UI/Card";
 import classes from "./RoomList.module.css";
+import Alert from "../Modal/Alert";
+import Error from "../Modal/Error";
 import classesHotel from "../HotelList/HotelList.module.css";
 
 function RoomList() {
   const [rooms, setRooms] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState("");
   const [reload, setReload] = useState(false);
-  const { sendRequest } = useHttp();
+  const { error, setError, sendRequest } = useHttp();
   const headers = [
     <input type={"checkbox"}></input>,
     "ID",
@@ -29,12 +33,11 @@ function RoomList() {
   }, [reload]);
 
   const onDeleteRoomHandler = (event) => {
-    const id = event.target.getAttribute("id");
     sendRequest(
       {
         url: `${serverURL}/admin/delete-room`,
         method: "POST",
-        body: { roomId: id },
+        body: { roomId: selectedRoom },
       },
       (data) => {
         console.log(data);
@@ -42,6 +45,12 @@ function RoomList() {
       }
     );
   };
+  const onShowAlert = (event) => {
+    const id = event.target.getAttribute("id");
+    setSelectedRoom(id);
+    setShowAlert(true);
+  };
+
   let data = [];
   if (rooms) {
     data = rooms.map((room) => [
@@ -53,7 +62,7 @@ function RoomList() {
       room.maxPeople,
       <button
         id={room._id}
-        onClick={onDeleteRoomHandler}
+        onClick={onShowAlert}
         className={classesHotel.delete}
       >
         Delete
@@ -67,6 +76,24 @@ function RoomList() {
         <Link to="/add-room">Add New</Link>
       </div>
       {data[0] && <Table headers={headers} data={data} />}
+      {showAlert && (
+        <Alert
+          message="Are you sure you want to delete this room?"
+          callback={onDeleteRoomHandler}
+          onClose={() => {
+            setShowAlert(false);
+            setSelectedRoom("");
+          }}
+        />
+      )}
+      {error && (
+        <Error
+          message={error}
+          onClose={() => {
+            setError("");
+          }}
+        />
+      )}
     </Card>
   );
 }

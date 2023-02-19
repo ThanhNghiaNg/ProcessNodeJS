@@ -5,11 +5,16 @@ import { Link } from "react-router-dom";
 import Table from "../Table/Table";
 import Card from "../UI/Card";
 import classes from "./HotelList.module.css";
+import { createPortal } from "react-dom";
+import Alert from "../Modal/Alert";
+import Error from "../Modal/Error";
 
 function HotelList() {
   const [hotels, setHotels] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedHotel, setSelectedHotel] = useState("");
   const [reload, setReload] = useState(false);
-  const { sendRequest } = useHttp();
+  const { error, setError, sendRequest } = useHttp();
   const headers = [
     <input type={"checkbox"}></input>,
     "ID",
@@ -27,19 +32,24 @@ function HotelList() {
     });
   }, [reload]);
 
-  const onDeleteHotelHandler = (event) => {
-    const id = event.target.getAttribute("id");
+  const onDeleteHotelHandler = () => {
     sendRequest(
       {
         url: `${serverURL}/admin/delete-hotel`,
         method: "POST",
-        body: { hotelId: id },
+        body: { hotelId: selectedHotel },
       },
       (data) => {
         console.log(data);
         setReload((prev) => !prev);
       }
     );
+  };
+
+  const onShowAlert = (event) => {
+    const id = event.target.getAttribute("id");
+    setSelectedHotel(id);
+    setShowAlert(true);
   };
   let data = [];
   if (hotels) {
@@ -50,11 +60,7 @@ function HotelList() {
       hotel.type,
       hotel.title ? hotel.title : hotel.name,
       hotel.city,
-      <button
-        id={hotel._id}
-        onClick={onDeleteHotelHandler}
-        className={classes.delete}
-      >
+      <button id={hotel._id} onClick={onShowAlert} className={classes.delete}>
         Delete
       </button>,
     ]);
@@ -66,6 +72,24 @@ function HotelList() {
         <Link to="/add-hotel">Add New</Link>
       </div>
       {data[0] && <Table headers={headers} data={data} />}
+      {showAlert && (
+        <Alert
+          message="Are you sure you want to delete this hotel?"
+          callback={onDeleteHotelHandler}
+          onClose={() => {
+            setShowAlert(false);
+            setSelectedHotel("");
+          }}
+        />
+      )}
+      {error && (
+        <Error
+          message={error}
+          onClose={() => {
+            setError("");
+          }}
+        />
+      )}
     </Card>
   );
 }

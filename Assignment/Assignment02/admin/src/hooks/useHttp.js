@@ -12,14 +12,17 @@ const useHttp = () => {
         body: configs.body ? JSON.stringify(configs.body) : null,
       });
       const data = await respone.json();
+      if (respone.status !== 200) {
+        setError(data.message);
+      }
       callback(data);
     } catch (err) {
       console.log(err);
-      setError(err.message);
     }
   };
   return {
     error,
+    setError,
     sendRequest,
   };
 };
