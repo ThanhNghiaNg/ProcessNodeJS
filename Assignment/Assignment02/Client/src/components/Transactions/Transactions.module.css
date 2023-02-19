@@ -1,0 +1,33 @@
+.transactions {
+  width: 80%;
+  margin: 2rem auto;
+}
+
+.transactions th,
+td {
+  border: #ccc solid 1px;
+  padding: 0.5rem;
+}
+
+.transactions th {
+  background-color: #339af0;
+  color: #fff;
+}
+
+.booked,
+.checkin,
+.checkout {
+  padding: 0.3rem 0.5rem;
+  color: #2b8a3e;
+  border-radius: 10px;
+}
+
+.booked {
+  background-color: #ffa8a8;
+}
+.checkin{
+    background-color: #69db7c;
+}
+.checkout{
+    background-color: #b197fc;
+}

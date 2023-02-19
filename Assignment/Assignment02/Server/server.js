@@ -4,6 +4,7 @@ const cors = require("cors");
 const addReferenceRooms = require("./utils/database").addReferenceRooms;
 const authRoute = require("./routes/auth");
 const bookingRoute = require("./routes/booking");
+const adminRoute = require("./routes/admin");
 
 const server = express();
 
@@ -11,12 +12,13 @@ const server = express();
 server.use(express.json({ type: ["application/json", "text/plain"] }));
 // use cors to communicate with different client port
 server.use(cors());
-server.use((req, res, next)=>{
-  addReferenceRooms()
-  next()
-})
+server.use((req, res, next) => {
+  addReferenceRooms();
+  next();
+});
 server.use(authRoute);
 server.use(bookingRoute);
+server.use('/admin',adminRoute);
 
 // Connect to mongodb
 mongoose.set("strictQuery", false);

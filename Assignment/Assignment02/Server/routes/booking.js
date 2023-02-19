@@ -16,6 +16,8 @@ route.use("/available-rooms", bookingControllers.getAvailableRooms);
 
 route.post("/create-transaction", bookingControllers.postTransaction);
 
+route.get("/transactions/:userId", bookingControllers.getTransaction);
+
 route.get("/images", bookingControllers.getImages);
 
 module.exports = route;

@@ -9,9 +9,9 @@ const initState = {
 };
 const AuthReducer = (state, action) => {
   if (action.type === LOGIN) {
-    return { ...state, isLoggedIn: true };
+    return { ...state, isLoggedIn: true, userId: action.userId };
   } else if (action.type === LOGOUT) {
-    return { ...state, isLoggedIn: false };
+    return { isLoggedIn: false, userId: "" };
   } else {
     return { ...state };
   }
@@ -23,7 +23,7 @@ function AuthProvider(props) {
   const loginHandler = (userId) => {
     localStorage.setItem("IS_LOGGED_IN", "true");
     localStorage.setItem("USER_ID", userId);
-    dispatch({ type: LOGIN });
+    dispatch({ type: LOGIN, userId });
   };
 
   const logoutHandler = () => {
@@ -34,6 +34,7 @@ function AuthProvider(props) {
 
   const value = {
     isLoggedIn: auth.isLoggedIn,
+    userId: auth.userId,
     login: loginHandler,
     logout: logoutHandler,
   };

@@ -1,6 +1,7 @@
 import classes from "./BookingForm.module.css";
 import DataRangeCom from "../Header/DataRangeCom";
 import { useState, useRef, useEffect, useContext } from "react";
+import {useNavigate} from 'react-router-dom'
 import Button from "../UI/Button";
 import useHttp from "../../hooks/useHttp";
 import { serverURL } from "../../utils/global";
@@ -17,6 +18,7 @@ function dateStringDiff(date1, date2) {
 function BookingForm(props) {
   const hotel = props.data;
   const authCtx = useContext(AuthContext);
+  const navigate = useNavigate()
   // Popup Daterange picker
   const options = [
     "vi-VN",
@@ -131,6 +133,7 @@ function BookingForm(props) {
         },
       },
       (data) => {
+        navigate('/transactions')
         console.log(data);
       }
     );

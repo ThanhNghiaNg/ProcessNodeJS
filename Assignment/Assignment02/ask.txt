@@ -1,0 +1,5 @@
+Dữ liệu giữa giao diện Bài cũ và bài mới không khớp, 
+với những trường không có trong dữ liệu mới được import thì bỏ hay phải thêm vào cho đủ?
+
+Yêu cầu số 9. (Admin) Xác thực và hiển thị Admin Dashboard.
+Doanh thu trung bình hàng tháng? 1 tháng thì làm sao tính trung bình?

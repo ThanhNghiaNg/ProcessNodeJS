@@ -11,15 +11,21 @@ const Navbar = (props) => {
   const navigate = useNavigate();
   // handle logout
   const logoutHandler = (event) => {
-    // event.preventDefault()
+    event.preventDefault();
     authCtx.logout();
+    console.log(authCtx);
     navigate("/login");
+    // Promise.all().then(() => {
+
+    // });
   };
   return (
     <Container className="navbar">
       <div className="container-navbar">
         <div className="top-nav">
-          <label>Booking Website</label>
+          <label>
+            <Link to="/">Booking Website</Link>
+          </label>
           {!authCtx.isLoggedIn && (
             <div>
               <button>
@@ -32,7 +38,9 @@ const Navbar = (props) => {
           )}
           {authCtx.isLoggedIn && (
             <div>
-              <button>Transaction</button>
+              <button>
+                <Link to="/transactions">Transactions</Link>
+              </button>
               <button onClick={logoutHandler}>Logout</button>
             </div>
           )}

@@ -6,6 +6,7 @@ const hotelSchema = new Schema({
   type: { type: String, require: true },
   city: { type: String, require: true },
   address: { type: String, require: true },
+  title: { type: String, require: true },
   distance: { type: String, require: true },
   photos: { type: Object, require: true },
   desc: { type: String, require: true },

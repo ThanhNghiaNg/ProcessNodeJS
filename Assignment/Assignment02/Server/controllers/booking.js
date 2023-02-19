@@ -143,6 +143,9 @@ exports.getHotel = (req, res, next) => {
     .populate("rooms")
     .then((hotel) => {
       res.send(hotel);
+    })
+    .then((err) => {
+      console.log(err);
     });
 };
 
@@ -160,9 +163,6 @@ exports.getAvailableRooms = (req, res, next) => {
           transactions.forEach((transaction) => {
             hotel.rooms = hotel.rooms.map((type) => {
               type.roomNumbers = type.roomNumbers.filter((roomNumber) => {
-                console.log(transaction.dateStart, transaction.dateEnd);
-                console.log(startDate, endDate);
-                console.log("------");
                 return (
                   !transaction.rooms.includes(roomNumber) ||
                   transaction.dateEnd.getDate() < startDate.getDate() ||
@@ -173,8 +173,11 @@ exports.getAvailableRooms = (req, res, next) => {
             });
           });
         }
-        return hotel.rooms;
+        return res.send(hotel.rooms);
       });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 
@@ -185,6 +188,7 @@ exports.postTransaction = (req, res, next) => {
   const paymentMethod = req.body.paymentMethod;
   const user = req.body.user;
   const price = req.body.price;
+  console.log(user)
 
   const transaction = new Transaction({
     user: user.id,
@@ -195,9 +199,28 @@ exports.postTransaction = (req, res, next) => {
     price,
     payment: paymentMethod,
     status: "Booked",
+    createdDate: new Date(),
   });
 
-  return transaction.save().then((result) => {
-    res.status(200).send({ nessage: "Created transaction!" });
-  });
+  return transaction
+    .save()
+    .then((result) => {
+      res.status(200).send({ nessage: "Created transaction!" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.getTransaction = (req, res, next) => {
+  const user = req.params.userId;
+  console.log(user)
+  Transaction.find({ user: user })
+    .populate("hotel")
+    .then((transactions) => {
+      res.status(200).send(transactions.reverse());
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
