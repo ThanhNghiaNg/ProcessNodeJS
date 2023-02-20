@@ -1,7 +1,7 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { serverURL } from "../utils/global";
 import { useNavigate } from "react-router-dom";
-import "./auth.css";
+import classes from "./auth.module.css";
 
 const LoginForm = (props) => {
   const navigate = useNavigate();
@@ -9,35 +9,46 @@ const LoginForm = (props) => {
   const usernameRef = useRef();
   const passwordRef = useRef();
 
+  const [message, setMessage] = useState({ error: "", success: "" });
+
   const loginHandler = (event) => {
     event.preventDefault();
-    fetch(`${serverURL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: usernameRef.current.value,
-        password: passwordRef.current.value,
-      }),
-      credentials: 'include',
-    })
-      .then((respone) => {
-        if (respone.ok) {
-          console.log(respone);
-          navigate("/");
-        }
-        return respone.json();
-      })
-      .then((data) => {
-        console.log(data);
+    const sendRequest = async () => {
+      const respone = await fetch(`${serverURL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: usernameRef.current.value,
+          password: passwordRef.current.value,
+        }),
+        credentials: "include",
       });
+      console.log(respone);
+      const data = await respone.json();
+      if (respone.status === 200) {
+        setMessage({ error: "", success: data.Message });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        setMessage({ error: data.Message, success: "" });
+      }
+    };
+    sendRequest();
   };
   return (
-    <form className="login-form" onSubmit={loginHandler}>
-      <div className="form-control">
-        <label>Username</label>
-        <input type={"text"} ref={usernameRef}></input>
-        <label>Password</label>
-        <input type={"password"} ref={passwordRef}></input>
+    <form className={classes["login-form"]} onSubmit={loginHandler}>
+      <div className={classes["form-control"]}>
+        <div className={classes["input-controls"]}>
+          <label>Username</label>
+          <input type={"text"} ref={usernameRef}></input>
+        </div>
+        <div className={classes["input-controls"]}>
+          <label>Password</label>
+          <input type={"password"} ref={passwordRef}></input>
+        </div>
+        <p className={classes.error}>{message.error}</p>
+        <p className={classes.success}>{message.success}</p>
         <button type="submit" className="btn">
           Login
         </button>

@@ -188,7 +188,6 @@ exports.postTransaction = (req, res, next) => {
   const paymentMethod = req.body.paymentMethod;
   const user = req.body.user;
   const price = req.body.price;
-  console.log(user)
 
   const transaction = new Transaction({
     user: user.id,
@@ -214,7 +213,6 @@ exports.postTransaction = (req, res, next) => {
 
 exports.getTransaction = (req, res, next) => {
   const user = req.params.userId;
-  console.log(user)
   Transaction.find({ user: user })
     .populate("hotel")
     .then((transactions) => {

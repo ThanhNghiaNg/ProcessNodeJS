@@ -149,23 +149,37 @@ exports.getRooms = (req, res, next) => {
 exports.deleteRoom = (req, res, next) => {
   // Chưa có điều kiện, xem lại đề
   const roomId = req.body.roomId;
-  console.log(roomId);
+  let exist = false;
   Transaction.find()
     .populate({ path: "hotel", populate: { path: "rooms" } })
     .then((transactions) => {
-      transactions.forEach((transaction) => {
-        const roomNumber = transaction.hotel.rooms.reduce((acc, room, idx) => {
-          return acc.concat(room.roomNumbers);
-        }, []);
-        const SetRowNumber = new Set(roomNumber);
-        Room.findById(roomId).then((room) => {
-          console.log(SetRowNumber);
-          const pickedRoom = room.roomNumbers.filter((number) =>
-            SetRowNumber.has(number)
-          );
-          console.log(pickedRoom);
+      const listRoomPickedEachHotel = transactions.map((transaction) => {
+        const selectedRoom = transaction.rooms;
+        return transaction.hotel.rooms.filter((room) =>
+          room.roomNumbers.some((number) => selectedRoom.includes(number))
+        );
+      });
+
+      listRoomPickedEachHotel.forEach((rooms) => {
+        rooms.forEach((room) => {
+          if (exist === false) {
+            if (room._id.toString() === roomId) {
+              exist = true;
+              console.log("send1");
+              return res.status(451).send({
+                message:
+                  "Cannot delete this room! It's already has been in a transaction.",
+              });
+            }
+          }
         });
       });
+
+      if (exist === false) {
+        return Room.findByIdAndDelete(roomId).then((result) => {
+          return res.send({ message: "Deleted Room!" });
+        });
+      }
     });
   // Room.findByIdAndDelete(roomId)
   //   .then((doc) => {
@@ -194,9 +208,12 @@ exports.addRoom = (req, res, next) => {
 
 // Get All transaction with page?
 exports.getTransactions = (req, res, next) => {
+  const page = req.params.page ? Number(req.params.page) : 1;
+  
   Transaction.find()
+    .populate(["hotel", "user"])
     .then((transactions) => {
-      res.send(transactions);
+      return res.send(transactions);
     })
     .catch((err) => {
       console.log(err);

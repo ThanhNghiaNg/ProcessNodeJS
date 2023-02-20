@@ -24,7 +24,12 @@ exports.postSignUp = (req, res, next) => {
   User.find({ email }).then((users) => {
     const user = users[0];
     if (!user) {
-      const newUser = new User({ username: email, email, password });
+      const newUser = new User({
+        username: email,
+        email,
+        password,
+        isAdmin: false,
+      });
       newUser
         .save()
         .then((result) => {

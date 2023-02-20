@@ -6,6 +6,7 @@ import HotelList from "./components/HotelList/HotelList";
 import HotelForm from "./components/HotelForm/HotelForm";
 import RoomForm from "./components/RoomForm/RoomForm";
 import RoomList from "./components/RoomList/RoomList";
+import TransactionList from "./components/TransactionList/TransactionList";
 function App() {
   return (
     <BrowserRouter>
@@ -22,7 +23,7 @@ function App() {
           {/* Add new room */}
           <Route path="/add-room" element={<RoomForm />} />
           {/* View all transactions */}
-          <Route path="/transactions" />
+          <Route path="/transactions" element={<TransactionList />} />
           {/* Edit hotel */}
           <Route path="/edit-hotel/:id" />
           {/* Edit room */}
