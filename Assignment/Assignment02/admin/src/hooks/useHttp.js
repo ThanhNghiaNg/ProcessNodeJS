@@ -4,6 +4,7 @@ const useHttp = () => {
   const [error, setError] = useState("");
   const token = localStorage.getItem("USER_ID");
   const sendRequest = async (configs, callback) => {
+    
     try {
       const respone = await fetch(configs.url, {
         method: configs.method ? configs.method : "GET",
@@ -11,7 +12,7 @@ const useHttp = () => {
           ? configs.headers
           : {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
+              'Authorization': `Bearer ${token}`
             },
         body: configs.body ? JSON.stringify(configs.body) : null,
       });

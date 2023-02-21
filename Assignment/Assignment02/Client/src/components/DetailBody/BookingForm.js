@@ -1,7 +1,7 @@
 import classes from "./BookingForm.module.css";
 import DataRangeCom from "../Header/DataRangeCom";
 import { useState, useRef, useEffect, useContext } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import useHttp from "../../hooks/useHttp";
 import { serverURL } from "../../utils/global";
@@ -18,7 +18,7 @@ function dateStringDiff(date1, date2) {
 function BookingForm(props) {
   const hotel = props.data;
   const authCtx = useContext(AuthContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // Popup Daterange picker
   const options = [
     "vi-VN",
@@ -47,7 +47,7 @@ function BookingForm(props) {
 
   // calculate totalBill base on number of day and room selected
   const totalBill = selectedRooms.reduce((acc, room) => {
-    return acc + room.price * (dateStringDiff(dateStartVal, dateEndVal) + 1);
+    return acc + room.price * (dateStringDiff(dateStartVal, dateEndVal));
   }, 0);
 
   useEffect(() => {
@@ -112,6 +112,13 @@ function BookingForm(props) {
     if (!paymentMethod) {
       return alert("Please select your payment method!");
     }
+    if (dateStartVal === dateEndVal) {
+      return alert("Date start and Date end must be difference!");
+    }
+
+    if (!authCtx.userId) {
+      return navigate("/login");
+    }
 
     return sendRequest(
       {
@@ -133,8 +140,7 @@ function BookingForm(props) {
         },
       },
       (data) => {
-        navigate('/transactions')
-        console.log(data);
+        navigate("/transactions");
       }
     );
   };

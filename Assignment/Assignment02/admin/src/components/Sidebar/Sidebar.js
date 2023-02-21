@@ -1,6 +1,14 @@
 import classes from "./Sidebar.module.css";
 import { NavLink, useMatch } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/authSlice";
+
 function Sidebar() {
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    dispatch(authActions.logout());
+  };
   return (
     <div className={classes.sidebar}>
       <span className={classes.section__label}>main</span>
@@ -50,7 +58,7 @@ function Sidebar() {
       <span className={classes.section__label}>user</span>
       <ul>
         <li>
-          <NavLink to="/login">
+          <NavLink to="/" onClick={logoutHandler}>
             <i className="fa-solid fa-right-from-bracket"></i> Logout
           </NavLink>
         </li>

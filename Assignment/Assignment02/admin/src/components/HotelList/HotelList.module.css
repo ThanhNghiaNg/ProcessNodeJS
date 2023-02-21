@@ -28,3 +28,7 @@
   background-color: red;
   color: #fff;
 }
+
+.dotted{
+  border: 2px dotted!important;
+}

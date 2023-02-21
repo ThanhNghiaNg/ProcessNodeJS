@@ -1,6 +1,7 @@
 .layout{
     display: grid;
     grid-template-columns: 1fr 5fr;
+    height: 100vh;
 }
 .layout>div{
     border: solid 1px #ccc;
@@ -12,4 +13,6 @@
     align-content: center;
     padding-block: 1.5rem;
     width: 100%;
+    align-self: center;
+    border: none!important;
 }

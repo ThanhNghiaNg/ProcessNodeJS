@@ -12,13 +12,15 @@ const server = express();
 server.use(express.json({ type: ["application/json", "text/plain"] }));
 // use cors to communicate with different client port
 server.use(cors());
+
 server.use((req, res, next) => {
   addReferenceRooms();
   next();
 });
+
 server.use(authRoute);
 server.use(bookingRoute);
-server.use('/admin',adminRoute);
+server.use("/admin", adminRoute);
 
 // Connect to mongodb
 mongoose.set("strictQuery", false);

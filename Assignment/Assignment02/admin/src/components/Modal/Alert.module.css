@@ -12,7 +12,9 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
-  width: 35rem;
+  width: fit-content;
+  max-width: 35rem;
+  text-align: center;
 }
 
 .actions-control {

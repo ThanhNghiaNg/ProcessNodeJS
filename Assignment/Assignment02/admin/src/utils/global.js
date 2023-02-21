@@ -4,5 +4,10 @@ export const convertDateToStr = (date) => {
 };
 
 export const stringCut = (str, maxLength) => {
-  return str.slice(0, maxLength) + "...";
+  if (!str) return "";
+  if (str.length > maxLength) {
+    return str.slice(0, maxLength) + "...";
+  } else {
+    return str;
+  }
 };

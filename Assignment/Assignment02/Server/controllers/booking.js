@@ -78,14 +78,13 @@ exports.getSearchResult = (req, res, next) => {
   console.log(req.url);
   // Get parameters from query
   const destination = req.query.destination;
-  const startDate = req.query.startDate;
-  const endDate = req.query.endDate;
+  const startDate = convertStrToDate(req.query.startDate, "/");
+  const endDate = convertStrToDate(req.query.endDate, "/");
   const minPrice = req.query.minPrice;
   const maxPrice = req.query.maxPrice;
   const adult = Number(req.query.adult);
   const children = Number(req.query.children);
   const room = req.query.room;
-
   // Find all hotel with its rooms information
   Hotel.find()
     .populate("rooms")
@@ -106,34 +105,35 @@ exports.getSearchResult = (req, res, next) => {
         hotelWithRoomsSuitable.map((hotel) => {
           // Find any transactions that are associated with the current hotel
           return Transaction.find({ hotel: hotel._id }).then((transactions) => {
-            // If there are no transactions, add the hotel to the suitable list and return it
-            if (transactions.length === 0) {
-              return hotel;
-            } else {
-              // Otherwise, kepp any room numbers that are not in transactions or not conflict date
+            if (transactions.length > 0) {
+              // Otherwise, keep room numbers that are not in transactions or not conflict date
               transactions.forEach((transaction) => {
-                hotel.rooms.roomNumbers = hotel.rooms.roomNumbers.filter(
-                  (roomNumber) => {
+                hotel.rooms = hotel.rooms.map((type) => {
+                  type.roomNumbers = type.roomNumbers.filter((roomNumber) => {
                     return (
-                      !transaction.includes(roomNumber) ||
-                      transaction.dateEnd < startDate ||
-                      transaction.dateStart > endDate
+                      !transaction.rooms.includes(roomNumber) ||
+                      transaction.dateEnd.getDate() < startDate.getDate() ||
+                      transaction.dateStart.getDate() > endDate.getDate()
                     );
-                  }
-                );
+                  });
+                  return type;
+                });
               });
-              // Add the hotel to the suitable list and return it
-              return hotel;
             }
+            return hotel;
           });
         })
-      ).then((hotels) => {
-        // Find hotel appropriate with require
-        const result = hotels.filter((hotel) => {
-          return hotel.rooms.length >= room && hotel.city === destination;
+      )
+        .then((hotels) => {
+          // Find hotel appropriate with require
+          const result = hotels.filter((hotel) => {
+            return hotel.rooms.length >= room && hotel.city.toLowerCase() === destination.toLowerCase();
+          });
+          return res.send(result);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        return res.send(result);
-      });
     });
 };
 
