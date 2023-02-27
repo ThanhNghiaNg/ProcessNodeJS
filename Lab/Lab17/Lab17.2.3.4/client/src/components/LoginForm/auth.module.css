@@ -1,0 +1,18 @@
+.login-form {
+  width: 20rem;
+  max-width: 90%;
+  margin: auto;
+  display: block;
+}
+.input-controls{
+  display: flex;
+  flex-direction: column;
+}
+
+.error{
+  color: red;
+}
+
+.success{
+  color: green
+}
