@@ -1,5 +1,5 @@
 import "./forms.css";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { serverURL } from "../utils/global";
 const AddProductForm = (props) => {
@@ -10,16 +10,23 @@ const AddProductForm = (props) => {
   const descriptionRef = useRef();
   const params = useParams();
   const edit = params.id && props.edit;
-  if (edit) {
-    fetch(`${serverURL}/admin/edit-product/${params.id}`)
-      .then((respone) => respone.json())
-      .then((data) => {
-        titleRef.current.value = data.result.title;
-        urlImageRef.current.value = data.result.imageUrl;
-        priceRef.current.value = data.result.price;
-        descriptionRef.current.value = data.result.description;
-      });
-  }
+  const [errorMsg, setErrorMsg] = useState("");
+  const [errorFields, setErrorFields] = useState([]);
+  useEffect(() => {
+    // Dùng credentials để gửi đi thông tin của session
+    if (edit) {
+      fetch(`${serverURL}/admin/edit-product/${params.id}`, {
+        credentials: "include",
+      })
+        .then((respone) => respone.json())
+        .then((data) => {
+          titleRef.current.value = data.result.title;
+          urlImageRef.current.value = data.result.imageUrl;
+          priceRef.current.value = data.result.price;
+          descriptionRef.current.value = data.result.description;
+        });
+    }
+  }, [edit]);
   const updateProductHandler = (event) => {
     event.preventDefault();
     if (
@@ -42,39 +49,66 @@ const AddProductForm = (props) => {
           price: priceRef.current.value,
           id: edit ? params.id : null,
         }),
+        credentials: "include",
       });
       const data = await respone.json();
-      if (data.ok) {
+      if (respone.status === 200) {
         navigate("/");
+      } else {
+        console.log(data);
+        setErrorFields(data.errors.errors.map((err) => err.param));
+        setErrorMsg(data.message);
       }
     };
     sendProduct();
     return;
   };
+  console.log(errorFields);
   return (
-    <form className="form-control">
-      <label>Title</label>
-      <input type="text" ref={titleRef}></input>
+    <>
+      {errorMsg && <p className="error">{errorMsg}</p>}
+      <form className="form-control">
+        <label>Title</label>
+        <input
+          type="text"
+          ref={titleRef}
+          className={`${errorFields.includes("title") ? "error-field" : ""}`}
+        ></input>
 
-      <label>Image URL</label>
-      <input type="text" ref={urlImageRef}></input>
+        <label>Image URL</label>
+        <input
+          type="text"
+          ref={urlImageRef}
+          className={`${errorFields.includes("imageUrl") ? "error-field" : ""}`}
+        ></input>
 
-      <label>Price</label>
-      <input type="number" ref={priceRef}></input>
+        <label>Price</label>
+        <input
+          type="number"
+          ref={priceRef}
+          className={`${errorFields.includes("price") ? "error-field" : ""}`}
+        ></input>
 
-      <label>Description</label>
-      <textarea ref={descriptionRef}></textarea>
-      {!props.edit && (
-        <button className="btn" onClick={updateProductHandler}>
-          Add Product
-        </button>
-      )}
-      {props.edit && (
-        <button className="btn" onClick={updateProductHandler}>
-          Update Product
-        </button>
-      )}
-    </form>
+        <label>Description</label>
+        <textarea
+          ref={descriptionRef}
+          className={`${
+            errorFields.includes("description") ? "error-field" : ""
+          }`}
+        ></textarea>
+
+        {!props.edit && (
+          <button className="btn" onClick={updateProductHandler}>
+            Add Product
+          </button>
+        )}
+        {props.edit && (
+          <button className="btn" onClick={updateProductHandler}>
+            Update Product
+          </button>
+        )}
+      </form>
+    </>
   );
 };
 

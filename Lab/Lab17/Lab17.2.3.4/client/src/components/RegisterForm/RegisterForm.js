@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { serverURL } from "../utils/global";
+import classes from "../LoginForm/auth.module.css";
 const RegisterForm = (props) => {
   const usernameRef = useRef();
   const passwordRef = useRef();
@@ -41,7 +42,7 @@ const RegisterForm = (props) => {
       <input type={"password"} ref={passwordRef}></input>
       <label>Confirm Password</label>
       <input type={"password"} ref={confirmPasswordRef}></input>
-      <p>{errorMsg}</p>
+      <p className={classes.error}>{errorMsg}</p>
       <button type="submit" className="btn">
         Register
       </button>

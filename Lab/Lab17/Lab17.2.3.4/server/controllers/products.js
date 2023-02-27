@@ -1,7 +1,12 @@
 const Product = require("../models/Product");
+const { validationResult } = require("express-validator");
 exports.addProduct = (req, res, next) => {
   const { title, imageUrl, description, price, id } = req.body;
-  const userId = req.user._id
+  const userId = req.session.user._id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).send({ message: errors.array()[0].msg, errors });
+  }
   if (id) {
     Product.findById(id).then((product) => {
       product.title = title;
@@ -16,7 +21,13 @@ exports.addProduct = (req, res, next) => {
       });
     });
   } else {
-    const product = new Product({ title, imageUrl, description, price, userId});
+    const product = new Product({
+      title,
+      imageUrl,
+      description,
+      price,
+      userId,
+    });
     product.save().then((result) => {
       if (result) {
         res.send({ ok: true, result });

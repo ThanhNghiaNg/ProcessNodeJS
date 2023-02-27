@@ -22,3 +22,17 @@
 .form-control textarea:focus {
   outline-color: #00695c;
 }
+
+.error {
+  color: red;
+  margin: 1rem auto;
+  padding: 1rem 4rem;
+  text-align: center;
+  width: 30rem;
+  background-color: rgba(255, 0, 0, 0.3);
+  border-radius: 12px;
+}
+
+.error-field{
+  border: solid 1px red!important;
+}
