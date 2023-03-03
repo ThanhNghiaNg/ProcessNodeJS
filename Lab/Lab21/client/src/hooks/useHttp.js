@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 function useHttp() {
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const sendRequest = async (config, callback) => {
     try {
+      setIsLoading(true);
       const respone = await fetch(config.url, {
         method: config.method ? config.method : "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json, image/*",
-        },
-        body: config.body ? JSON.stringify(config.body) : null,
+        headers: config.headers
+          ? config.headers
+          : {
+              "Content-Type": "application/json",
+              Accept: "application/json, image/*",
+            },
+        body: config.body ? config.body : null,
         credentials: "include",
       });
       const data = await respone.json();
+
       if (respone.status === 200 || respone.status === 201) {
         if (callback) {
           callback(data);
@@ -22,6 +27,7 @@ function useHttp() {
       } else {
         setError(data.message);
       }
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -30,6 +36,7 @@ function useHttp() {
   return {
     error,
     setError,
+    isLoading,
     sendRequest,
   };
 }

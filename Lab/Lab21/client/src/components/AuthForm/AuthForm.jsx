@@ -1,5 +1,6 @@
 import classes from "./AuthForm.module.css";
 import Card from "../UI/Card";
+import Error from "../Error/Error";
 
 import React, { useState } from "react";
 import useHttp from "../../hooks/useHttp";
@@ -45,11 +46,7 @@ function AuthForm(props) {
   return (
     <Card className="w-50 mx-auto my-3">
       <form onSubmit={submitHandler}>
-        {error && (
-          <Card className={classes.error}>
-            <span>{error}</span>
-          </Card>
-        )}
+        {error && <Error error={error} />}
         <div className="mt-3">
           <label className="text-uppercase mb-1">your e-mail</label>
           <input

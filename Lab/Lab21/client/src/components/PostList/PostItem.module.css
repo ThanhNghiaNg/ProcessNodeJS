@@ -1,0 +1,16 @@
+.item {
+  width: 50%;
+  margin: 1rem auto;
+  border: solid 3px var(--primary-color);
+  box-shadow: none;
+}
+
+.title {
+  color: var(--primary-color);
+}
+
+.action-controls button {
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+

@@ -15,7 +15,7 @@ const fileStorage = multer.diskStorage({
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().getTime() + "-" + file.fieldname);
+    cb(null, new Date().getTime() + "-" + file.originalname);
   },
 });
 
@@ -40,22 +40,14 @@ const store = new MongoDBStore({
 });
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb", extended: true }));
 app.use(
   cors({
     origin: true,
     credentials: true,
   })
 );
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, PUT, PATCH, DELETE"
-//   );
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   next();
-// });
+
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
 );
