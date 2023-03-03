@@ -9,6 +9,8 @@ exports.postLogin = (req, res, next) => {
   }
   User.findOne({ email }).then((user) => {
     if (user.password === password) {
+      req.session.isLoggedIn = true;
+      req.session.user = user;
       return res.send({ message: "Succeffly Login!", token: user._id });
     } else {
       return res.status(422).send({ message: "Password is incorrect!" });
