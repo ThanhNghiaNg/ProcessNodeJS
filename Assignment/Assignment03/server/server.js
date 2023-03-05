@@ -1,34 +1,64 @@
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const express = require('express');
-const session = require('express-session');
+const express = require("express");
+const cors = require("cors");
+const multer = require("multer");
+const session = require("express-session");
+const bcrypt = require("bcryptjs");
+const MongoDBStore = require("connect-mongodb-session")(session);
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const User = require("./models/User");
 
-const errorController = require('./controllers/error');
-const User = require('./models/user');
+const authRoutes = require("./routes/auth");
+const shopRoutes = require("./routes/shop");
+const adminRoutes = require("./routes/admin");
 
-const MONGODB_URI =
-  'mongodb+srv://owwibookstore:owwibookstore@cluster0.o5luvip.mongodb.net/TestProduct?retryWrites=true&w=majority';
-
-const app = express();
-const store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: 'sessions'
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().getTime() + "-" + file.originalname);
+  },
 });
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const authRoutes = require('./routes/auth');
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/png"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+const MONGODB_URI =
+  "mongodb+srv://owwibookstore:owwibookstore@cluster0.o5luvip.mongodb.net/FUNiXAssignment03?retryWrites=true&w=majority";
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: "UserSessions",
+});
+
+const app = express();
+app.use(bodyParser.json());
+app.use(express.static(__dirname));
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).array("files")
+);
 app.use(
   session({
-    secret: 'my secret',
+    secret: "my secret",
     resave: false,
     saveUninitialized: false,
-    store: store
+    store: store,
   })
 );
 
@@ -37,27 +67,27 @@ app.use((req, res, next) => {
     return next();
   }
   User.findById(req.session.user._id)
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return next();
       }
       req.user = user;
       next();
     })
-    .catch(err => {
+    .catch((err) => {
       throw new Error(err);
     });
 });
 
-app.use('/admin', adminRoutes);
-app.use(shopRoutes);
 app.use(authRoutes);
+app.use(shopRoutes);
+app.use("/admin", adminRoutes);
 
 mongoose
   .connect(MONGODB_URI)
-  .then(result => {
-    app.listen(3001);
+  .then((result) => {
+    app.listen(5000);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });

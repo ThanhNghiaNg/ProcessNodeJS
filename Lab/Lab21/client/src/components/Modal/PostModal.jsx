@@ -23,7 +23,6 @@ function Modal(props) {
   const { error, setError, sendRequest } = useHttp();
 
   useEffect(() => {
-    console.log(id);
     if (id) {
       sendRequest({ url: `${serverUrl}/post/${id}` }, (data) => {
         setTitle(data.title);
@@ -31,6 +30,11 @@ function Modal(props) {
       });
     }
   }, [id]);
+
+  let isNotValid = image && title && content ? false : true;
+  if (edit) {
+    isNotValid = title && content ? false : true;
+  }
 
   function handleFileSelect(event) {
     const file = event.target.files[0];
@@ -68,7 +72,7 @@ function Modal(props) {
       }
     );
   };
-
+  console.log(isNotValid);
   return (
     <Backdrop>
       <Card className={classes.modal}>
@@ -119,7 +123,13 @@ function Modal(props) {
             >
               CANCEL
             </button>
-            <button className={`btn btn-outline-primary`} type="submit">
+            <button
+              className={`btn btn-outline-primary ${
+                isNotValid ? classes.invalid : ""
+              }`}
+              type="submit"
+              disabled={isNotValid}
+            >
               ACCEPT
             </button>
           </div>

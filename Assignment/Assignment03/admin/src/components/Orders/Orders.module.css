@@ -1,0 +1,11 @@
+.orders {
+  background-color: #fff;
+  margin-top: var(--m2);
+}
+.table {
+  margin-top: 1.5rem;
+}
+.table td,
+th {
+  border: solid 1px #ccc;
+}

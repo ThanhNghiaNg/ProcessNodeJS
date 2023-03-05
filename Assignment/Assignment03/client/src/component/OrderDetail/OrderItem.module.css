@@ -1,0 +1,7 @@
+.item {
+  text-align: center;
+  margin-block: 1rem;
+}
+.img img {
+  max-width: 10rem;
+}

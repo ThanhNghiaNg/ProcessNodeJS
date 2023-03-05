@@ -1,0 +1,17 @@
+.history {
+  width: 100%;
+}
+
+.history th,
+td {
+  font-style: italic;
+  text-align: center;
+  padding-block: 1rem;
+}
+.history th {
+  text-transform: uppercase;
+  background-color: var(--bg-ligth-gray);
+}
+.history td {
+  color:  var(--text-dark-gray);
+}

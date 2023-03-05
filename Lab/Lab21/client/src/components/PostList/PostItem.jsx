@@ -5,11 +5,13 @@ import Card from "../UI/Card";
 import useHttp from "../../hooks/useHttp";
 import { serverUrl } from "../../utils/constant";
 import PostModal from "../Modal/PostModal";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function PostItem({ post, reload }) {
   const { sendRequest } = useHttp();
   const [showModal, setShowModal] = useState(false);
-
+  const token = useSelector((state) => state.auth.token);
   const showModalHandler = () => {
     setShowModal(true);
   };
@@ -25,7 +27,6 @@ function PostItem({ post, reload }) {
       }
     );
   };
-  console.log(post._id)
   const date = new Date(post.dateCreate).toLocaleString("us").split(", ")[1];
   return (
     <Card className={classes.item}>
@@ -36,13 +37,19 @@ function PostItem({ post, reload }) {
       <div
         className={`d-flex justify-content-end ${classes["action-controls"]}`}
       >
-        <button className="btn">view</button>
-        <button className="btn" onClick={showModalHandler}>
-          edit
-        </button>
-        <button className="btn text-danger" onClick={deleteHandler}>
-          delete
-        </button>
+        <Link to={`/post/${post._id}`} className="btn">
+          View
+        </Link>
+        {post.user._id === token && (
+          <>
+            <button className="btn" onClick={showModalHandler}>
+              edit
+            </button>
+            <button className="btn text-danger" onClick={deleteHandler}>
+              delete
+            </button>
+          </>
+        )}
       </div>
       {showModal && (
         <PostModal edit={true} id={post._id} onClose={closeModalHandler} />

@@ -60,6 +60,9 @@ app.use(
   })
 );
 
+// Serve static files from the same folder as server.js
+app.use(express.static(__dirname));
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();

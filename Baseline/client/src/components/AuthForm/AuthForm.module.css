@@ -1,0 +1,16 @@
+.submit {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.submit:hover {
+  background-color: violet;
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.4);
+  color: red;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 18px;
+}

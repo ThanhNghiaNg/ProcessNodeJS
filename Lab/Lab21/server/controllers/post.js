@@ -5,17 +5,19 @@ exports.getPosts = (req, res, next) => {
     .then((posts) => {
       console.log(req.url);
       console.log(posts);
-      return res.send(posts);
+      return res.send(posts.reverse());
     })
     .catch((err) => {
       return res.status(500).send({ message: err.message });
     });
 };
+
 exports.getPost = (req, res, next) => {
   const id = req.params.id;
   console.log(id);
   Post.findById(id).then((post) => {
-    return res.send(post);
+    const imageUrl = `${req.protocol}://${req.get("host")}/${post.imageUrl}`;
+    return res.json({ ...post._doc, imageUrl });
   });
 };
 
@@ -67,12 +69,18 @@ exports.editPost = (req, res, next) => {
 
 exports.deletePost = (req, res, next) => {
   const id = req.params.id;
-  Post.findByIdAndDelete(id)
-    .then((result) => {
-      console.log(result);
-      return res.send({ message: "Deleted Post!" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  Post.findById(id).then((post) => {
+    if (post.user._id.toString() != req.session.user._id.toString()) {
+      return res.status(401).send({ message: "User do not have right!" });
+    } else {
+      Post.findByIdAndDelete(id)
+        .then((result) => {
+          console.log(result);
+          return res.send({ message: "Deleted Post!" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  });
 };

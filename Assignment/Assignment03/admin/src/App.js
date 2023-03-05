@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DashBoard from "./pages/DashBoard";
+import Products from "./pages/Products";
+import CreateProduct from "./pages/CreateProduct";
+import UpdateProduct from "./pages/UpdateProduct";
+import Chat from "./pages/Chat";
+import Layout from "./Layout/Layout";
+import AuthForm from "./components/AuthForm/AuthForm";
+import { useSelector } from "react-redux";
 
 function App() {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      {!isLoggedIn && <AuthForm />}
+      {isLoggedIn && (
+        <Layout>
+          <Routes>
+            <Route path="/" element={<DashBoard />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/create-product" element={<CreateProduct />} />
+            <Route path="/update-product/:id" element={<UpdateProduct />} />
+            <Route path="/chat" element={<Chat />} />
+          </Routes>
+        </Layout>
+      )}
+    </BrowserRouter>
   );
 }
 

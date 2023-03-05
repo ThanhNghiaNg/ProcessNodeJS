@@ -1,0 +1,16 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--primary-color);
+  padding: 0.5rem;
+}
+
+
+.navigation {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.active {
+  color: rgb(255, 213, 0) !important;
+}

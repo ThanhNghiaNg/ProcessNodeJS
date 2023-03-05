@@ -1,0 +1,9 @@
+.submit {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.submit:hover {
+  background-color: violet;
+}
+
