@@ -14,15 +14,19 @@ import { serverUrl } from "../../utils/constant";
 const DetailProduct = (props) => {
   const navigate = useNavigate();
   const product = props.product;
+  const quantityAvailable = product.quantity || 0;
 
   const { sendRequest } = useHttp();
   const [showLongDesc, setShowLongDesc] = useState(true); // state for handling show description or not
   const [mainImageSrc, setMainImageSrc] = useState(null); // state for changing the largest display image
   const [quantity, setQuantity] = useState(1); // state for changing the quantity of product
   const [addedToCartSuccess, setAddedToCartSuccess] = useState(null);
+
   // Increase quantity of product
   const increasequantityHandler = () => {
-    setQuantity((quantity) => quantity + 1);
+    setQuantity((quantity) =>
+      quantity + 1 <= quantityAvailable ? quantity + 1 : quantity
+    );
   };
   // Descrease quantity of product
   const descreasequantityHandler = () => {
@@ -115,9 +119,7 @@ const DetailProduct = (props) => {
         </div>
         <div className="col">
           <h1>{product.name}</h1>
-          <p className="fs-4 light-gray">
-            {addStyleCurrency(product.price)}
-          </p>
+          <p className="fs-4 light-gray">{addStyleCurrency(product.price)}</p>
           <p className="light-gray">{product.short_desc}</p>
           <h5 className="text-uppercase">
             category:{" "}
@@ -125,28 +127,40 @@ const DetailProduct = (props) => {
               {product.category}
             </span>
           </h5>
-          <div className={classes["add-form"]}>
-            <label className="light-gray">QUANTITY</label>
-            <button
-              className={classes["no-style"]}
-              onClick={descreasequantityHandler}
-            >
-              <i className="fa fa-caret-left"></i>
-            </button>
-            <input type="number" value={quantity} min={1}></input>
-            <button
-              className={classes["no-style"]}
-              onClick={increasequantityHandler}
-            >
-              <i className="fa fa-caret-right"></i>
-            </button>
-            <Button
-              className={classes["add-cart-button"]}
-              onClick={addToCartHandler}
-            >
-              Add to Cart
-            </Button>
-          </div>
+          {quantityAvailable !== 0 && (
+            <>
+              <p className="text-warning fs-6">
+                Chỉ còn {quantityAvailable} sản phẩm!
+              </p>
+              <div className={classes["add-form"]}>
+                <label className="light-gray">QUANTITY</label>
+                <button
+                  className={classes["no-style"]}
+                  onClick={descreasequantityHandler}
+                >
+                  <i className="fa fa-caret-left"></i>
+                </button>
+                <input type="number" value={quantity} min={1}></input>
+                <button
+                  className={classes["no-style"]}
+                  onClick={increasequantityHandler}
+                >
+                  <i className="fa fa-caret-right"></i>
+                </button>
+                <Button
+                  className={classes["add-cart-button"]}
+                  onClick={addToCartHandler}
+                >
+                  Add to Cart
+                </Button>
+              </div>
+            </>
+          )}
+          {quantityAvailable === 0 && (
+            <p className="text-warning fs-5">
+              Sản phẩm hiện tại đã hết hàng, hãy quay lại sau!
+            </p>
+          )}
           {addedToCartSuccess && (
             <>
               <div className="text-success mt-3">Added Product To Cart</div>

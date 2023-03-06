@@ -4,8 +4,9 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import useHttp from "../../hooks/useHttp";
-import { serverUrl } from "../../utils/global";
+import { addStyleCurrency, serverUrl } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from "../Modal/ConfirmModal";
 
 function ProductForm(props) {
   const id = props.id;
@@ -16,6 +17,7 @@ function ProductForm(props) {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [image, setImage] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const { error, sendRequest } = useHttp();
   const navigate = useNavigate();
 
@@ -58,8 +60,7 @@ function ProductForm(props) {
         body: formData,
       },
       (data) => {
-        console.log(data);
-        navigate("/products");
+        setShowModal(true);
       }
     );
   };
@@ -153,6 +154,18 @@ function ProductForm(props) {
       <button className="btn btn-primary" onClick={submitHandler}>
         Submit
       </button>
+      {showModal && (
+        <ConfirmModal
+          inform={true}
+          message={`${id ? "Update" : "Create"} Product successfully!`}
+          onClose={() => {
+            setShowModal(false);
+          }}
+          handler={() => {
+            navigate("/products");
+          }}
+        />
+      )}
     </form>
   );
 }

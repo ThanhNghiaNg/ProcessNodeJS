@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 
 function Order({ order }) {
+  console.log(order);
   return (
     <tr className={classes.item}>
       <td>{order._id}</td>

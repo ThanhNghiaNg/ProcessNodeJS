@@ -6,31 +6,31 @@ import OrderItem from "./OrderItem";
 function OrderDetail(props) {
   const order = props.order;
   console.log(order);
-  const contentOrderItems = order.items.map((item) => {
-    return <OrderItem item={item} />;
+  const contentOrderItems = order.items.map((item, idx) => {
+    return <OrderItem item={item} key={idx} />;
   });
   return (
     <div>
       <div className={classes.user}>
         <h2>information order</h2>
         <div>
-          <span className>ID_User:</span>
+          <span>ID_User:</span>
           <span>{order.user.userId}</span>
         </div>
         <div>
-          <span className>Full Name:</span>
+          <span>Full Name:</span>
           <span>{order.user.fullName}</span>
         </div>
         <div>
-          <span className>Phone:</span>
+          <span>Phone:</span>
           <span>{order.user.phone}</span>
         </div>
         <div>
-          <span className>Address:</span>
+          <span>Address:</span>
           <span>{order.user.address}</span>
         </div>
         <div>
-          <span className>Total:</span>
+          <span>Total:</span>
           <span>{order.totalPrice}</span>
         </div>
       </div>

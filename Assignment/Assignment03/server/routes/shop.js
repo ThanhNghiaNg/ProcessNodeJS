@@ -2,6 +2,7 @@ const express = require("express");
 const shopController = require("../controllers/shop");
 const productController = require("../controllers/product");
 const userController = require("../controllers/user");
+const sessionController = require('../controllers/session')
 const isAuth = require("../middlewares/isAuthUser");
 const { body } = require("express-validator/check");
 const route = express.Router();
@@ -52,5 +53,11 @@ route.post(
 route.get("/history", isAuth, shopController.getOrderHistory);
 
 route.get("/order/:id", isAuth, shopController.getOrder);
+
+route.post("/room", isAuth, sessionController.createRoomChat);
+
+route.get("/room/:id", isAuth, sessionController.getRoom);
+
+route.patch("/room/:id", isAuth, sessionController.pushMessage);
 
 module.exports = route;

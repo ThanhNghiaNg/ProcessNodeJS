@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import ConfirmModal from "../Modal/ConfirmModal";
 import useHttp from "../../hooks/useHttp";
-import { serverUrl } from "../../utils/global";
+import { addStyleCurrency, serverUrl } from "../../utils/global";
 
 function ProductItem({ item, onReload }) {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -32,7 +32,7 @@ function ProductItem({ item, onReload }) {
     <tr>
       <td>{item._id}</td>
       <td>{item.name}</td>
-      <td>{item.price}</td>
+      <td>{addStyleCurrency(item.price)}</td>
       <td className={classes.img}>
         <img src={item.img1} alt={item.name} />
       </td>

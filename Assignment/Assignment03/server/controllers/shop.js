@@ -99,19 +99,25 @@ exports.placeOrder = (req, res, next) => {
 };
 
 exports.getOrderHistory = (req, res, next) => {
-  Order.find({ "user.userId": req.user._id }).then((orders) => {
-    return res.send(orders);
-  });
+  Order.find({ "user.userId": req.user._id })
+    .sort({ createAt: -1 })
+    .then((orders) => {
+      return res.send(orders);
+    });
 };
 
 exports.getOrder = (req, res, next) => {
   const id = req.params.id;
-  Order.find({ "user.userId": req.user._id, _id: id }).populate('items.productId').then((orders) => {
-    if (!orders[0]) {
-      return res.status(400).send({
-        message: "Wrong Order ID or User do not have right to access",
-      });
-    }
-    return res.send(orders[0]);
-  });
+  Order.find({ "user.userId": req.user._id, _id: id })
+    .populate("items.productId")
+    .then((orders) => {
+      if (!orders[0]) {
+        return res.status(400).send({
+          message: "Wrong Order ID or User do not have right to access",
+        });
+      }
+      return res.send(orders[0]);
+    });
 };
+
+

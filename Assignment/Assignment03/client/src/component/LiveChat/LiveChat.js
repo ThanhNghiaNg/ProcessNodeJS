@@ -1,14 +1,26 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import useHttp from "../../hooks/useHttp";
 import classes from "./LiveChat.module.css";
+import { serverUrl } from "../../utils/constant";
+import { authActions } from "../../store/authSlice";
 
 const LiveChat = (props) => {
   const [isShowBoxChat, setIsShowBoxChat] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true);
   const [messageInput, setMessageInput] = useState("");
-  const [history, setHistory] = useState([
-    { author: "unknown", message: "Xin chào" },
-    { author: "unknown", message: "Làm thế nào để xem các sản phẩm" },
-  ]);
+  const [history, setHistory] = useState([]);
+  const roomId = useSelector((state) => state.auth.roomId);
+  const { sendRequest } = useHttp();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (roomId) {
+      sendRequest({ url: `${serverUrl}/room/${roomId}` }, (data) => {
+        setHistory(data.streamData);
+      });
+    }
+  }, [roomId]);
+
   const enteredMessageHandler = (event) => {
     setMessageInput(event.target.value);
   };
@@ -16,11 +28,41 @@ const LiveChat = (props) => {
   const toggleBoxChatHandler = () => {
     setIsShowBoxChat((state) => !state);
   };
+
   const sendMessageHandler = () => {
-    const message = messageInput;
-    setHistory((state) => [...state, { author: "ADMIN", message: message }]);
+    if (messageInput === "/end") {
+      dispatch(authActions.deleteRoom());
+      setHistory([]);
+      return;
+    }
+    if (!roomId) {
+      sendRequest(
+        {
+          url: `${serverUrl}/room`,
+          method: "POST",
+          body: JSON.stringify({ content: messageInput }),
+        },
+        (data) => {
+          dispatch(authActions.createRoom(data._id));
+          setHistory(data.streamData);
+        }
+      );
+    } else {
+      sendRequest(
+        {
+          url: `${serverUrl}/room/${roomId}`,
+          method: "PATCH",
+          body: JSON.stringify({ content: messageInput }),
+        },
+        (data) => {
+          dispatch(authActions.createRoom(data._id));
+          setHistory(data.streamData);
+        }
+      );
+    }
     setMessageInput("");
   };
+  
   const renderHistory = history.map((mess) => {
     if (mess.author == "ADMIN")
       return (
