@@ -3,6 +3,16 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 const { validationResult } = require("express-validator/check");
 const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+const { generateOrderMail } = require("../utils/global");
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "nguoidung9994@gmail.com",
+    pass: "frxzcuisybomkeoc",
+  },
+});
 
 exports.getImagesOverall = (req, res, next) => {
   const imgOverallPath = "images/overall";
@@ -88,8 +98,40 @@ exports.placeOrder = (req, res, next) => {
         status: "paying",
       });
       return newOrder.save().then((result) => {
-        return user.resetCart().then(() => {
-          return res.send({ message: "Created Order!" });
+        const productInfo = [];
+        Promise.all(
+          result.items.map((item) =>
+            Product.findById(item.productId).then((product) => {
+              product.quantity -= item.quantity;
+              productInfo.push({
+                name: product.name,
+                img: product.img1,
+                price: product.price,
+                quantity: item.quantity,
+                totalPrice: item.quantity * product.price,
+              });
+              return product.save();
+            })
+          )
+        ).then(() => {
+          transporter.sendMail(
+            {
+              from: "nguoidung9994@gmail.com",
+              to: user.email,
+              subject: "Successfully Order",
+              html: generateOrderMail(newOrder.user, productInfo, newOrder.totalPrice),
+            },
+            (error, info) => {
+              if (error) {
+                console.error(error);
+              } else {
+                console.log("Email sent: " + info.response);
+              }
+            }
+          );
+          return user.resetCart().then(() => {
+            return res.send({ message: "Created Order!" });
+          });
         });
       });
     })
@@ -119,5 +161,3 @@ exports.getOrder = (req, res, next) => {
       return res.send(orders[0]);
     });
 };
-
-

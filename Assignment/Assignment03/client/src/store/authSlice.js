@@ -1,4 +1,4 @@
-import { createReducer, createSlice } from "@reduxjs/toolkit";
+import {  createSlice } from "@reduxjs/toolkit";
 
 const initState = {
   token: localStorage.getItem("TOKEN") || "",
@@ -20,9 +20,12 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     logout: (state, action) => {
+      console.log("postLogout");
       localStorage.removeItem("TOKEN");
       localStorage.removeItem("IS_LOGGED_IN");
       localStorage.removeItem("USER_NAME");
+      localStorage.removeItem("ROOM_ID");
+      state.roomId = "";
       state.name = "";
       state.token = "";
       state.isLoggedIn = false;

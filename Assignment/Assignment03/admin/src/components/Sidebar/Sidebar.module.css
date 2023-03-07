@@ -3,7 +3,7 @@
   box-shadow: 0 0 3px #000;
   background-color: #fff;
   position: sticky;
-  top:0;
+  top: 0;
 }
 
 .role {
@@ -11,14 +11,16 @@
   text-align: center;
   padding-block: 2rem;
   box-shadow: 0 0 3px #000;
+  text-transform: capitalize;
 }
 
 .navigation {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: space-around; */
   height: 80%;
   gap: 2rem;
+  margin-top: 3rem;
 }
 
 .navigation li {

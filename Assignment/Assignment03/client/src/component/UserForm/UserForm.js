@@ -53,7 +53,7 @@ const UserForm = (props) => {
         body: JSON.stringify({
           email: emailRef.current.value,
           password,
-          role: ["customer"],
+          role: ["customer", "admin", "consultant"],
           ...(isLogining
             ? {}
             : {

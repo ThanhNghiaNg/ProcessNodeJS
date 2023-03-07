@@ -11,21 +11,26 @@ const CartItem = (props) => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.users.currentUser);
   const product = props.record.productId;
+  const availableQuantity = product.quantity;
   const { sendRequest } = useHttp();
   const [quantity, setQuantity] = useState(props.record.quantity); // state for handling quantity of product
 
   // Increase quantity of product in cart, and save it to store, as well as local storage
   const increaseQuantityHandler = () => {
-    sendRequest(
-      {
-        url: `${serverUrl}/update-quantity-product-cart`,
-        method: "POST",
-        body: JSON.stringify({ product: product, quantity: quantity + 1 }),
-      },
-      (data) => {
-        props.onLoad();
-      }
-    );
+    const displayquantity =
+      quantity + 1 <= availableQuantity ? quantity + 1 : quantity;
+    if (displayquantity !== quantity) {
+      sendRequest(
+        {
+          url: `${serverUrl}/update-quantity-product-cart`,
+          method: "POST",
+          body: JSON.stringify({ product: product, quantity: quantity + 1 }),
+        },
+        (data) => {
+          props.onLoad();
+        }
+      );
+    }
   };
 
   // Descrease quantity of product in cart, and save it to store, as well as local storage
@@ -67,9 +72,7 @@ const CartItem = (props) => {
         <img src={product.img1}></img>
       </div>
       <div className="col-3 fw-bold">{product.name}</div>
-      <div className="col light-gray">
-        {addStyleCurrency(product.price)}
-      </div>
+      <div className="col light-gray">{addStyleCurrency(product.price)}</div>
       <div className="col">
         <div
           className={`${detailClasses["add-form"]} ${classes["auto-margin"]} border-0 p-0`}

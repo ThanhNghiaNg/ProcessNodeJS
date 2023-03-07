@@ -5,8 +5,10 @@ import useHttp from "../../hooks/useHttp";
 import { useDispatch } from "react-redux";
 import { serverUrl } from "../../utils/global";
 import { authActions } from "../../store/authSlice";
+import { useSelector } from "react-redux";
 
 function Sidebar(props) {
+  const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
   const { sendRequest } = useHttp();
   const logoutHandler = () => {
@@ -14,19 +16,24 @@ function Sidebar(props) {
       dispatch(authActions.logout());
     });
   };
+  const adminNavigation = (
+    <>
+      <li className={useMatch("/") && classes.active}>
+        <Link to="/">DashBoard</Link>
+      </li>
+      <li className={useMatch("/products") && classes.active}>
+        <Link to="/products">Products</Link>
+      </li>
+      <li className={useMatch("/create-product") && classes.active}>
+        <Link to="/create-product">New Product</Link>
+      </li>
+    </>
+  );
   return (
     <div className={classes.sidebar}>
-      <div className={classes.role}>Admin</div>
+      <div className={classes.role}>{role}</div>
       <ul className={classes.navigation}>
-        <li className={useMatch("/") && classes.active}>
-          <Link to="/">DashBoard</Link>
-        </li>
-        <li className={useMatch("/products") && classes.active}>
-          <Link to="/products">Products</Link>
-        </li>
-        <li className={useMatch("/create-product") && classes.active}>
-          <Link to="/create-product">New Product</Link>
-        </li>
+        {role === "admin" && adminNavigation}
         <li className={useMatch("/chat") && classes.active}>
           <Link to="/chat">Chat</Link>
         </li>

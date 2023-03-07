@@ -28,7 +28,11 @@ function AuthForm(props) {
       },
       (data) => {
         dispatch(authActions.login({ token: data.token, role: data.role }));
-        navigate("/");
+        if (data.role === "admin") {
+          navigate("/");
+        }else{
+          navigate("/chat");
+        }
       }
     );
   };

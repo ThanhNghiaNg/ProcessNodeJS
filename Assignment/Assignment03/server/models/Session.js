@@ -17,7 +17,7 @@ sessionSchema.methods.pushMessage = function (message, userId) {
   streamDataUpdated.push({
     createAt: new Date(),
     content: message,
-    user: new mongoose.ObjectId(userId),
+    user: new mongoose.Types.ObjectId(userId),
   });
   this.streamData = [...streamDataUpdated];
   return this.save();

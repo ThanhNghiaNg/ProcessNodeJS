@@ -10,9 +10,17 @@ import RegisterPage from "./Pages/RegisterPage";
 import HistoryPage from './Pages/HistoryPage'
 import OrderDetailPage from './Pages/OrderDetailPage'
 import Layout from "./component/Layout/Layout";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "./store/authSlice";
 function App() {
-  const currentUser = useSelector((state) => state.users.currentUser);
+  const dispatch = useDispatch();
+  // Logout when user close browser
+  window.onload = () => {
+    const cookies = document.cookie;
+    if (cookies.indexOf("connect.sid") === -1) {
+      dispatch(authActions.logout());
+    }
+  };
   return (
     <React.Fragment>
       <BrowserRouter>

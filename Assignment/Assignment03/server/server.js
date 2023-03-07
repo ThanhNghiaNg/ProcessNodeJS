@@ -86,7 +86,11 @@ app.use("/admin", adminRoutes);
 mongoose
   .connect(MONGODB_URI)
   .then((result) => {
-    app.listen(5000);
+    const server = app.listen(5000);
+    const io = require("./socket").init(server);
+    io.on("connection", (socket) => {
+      console.log("Client Connected!");
+    });
   })
   .catch((err) => {
     console.log(err);

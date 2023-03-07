@@ -1,5 +1,10 @@
 :root {
   --primary-background: #f9fbfd;
+  --text-ligth-gray: #adb5bd;
+  --text-dark-gray: #343a40;
+  --primary-cyan: #48b0f7;
+  --bg-ligth-gray: #f8f9fa;
+  --bg-light-teal: #96f2d7;
   --m2: 2rem;
   --p1: 1rem;
 }

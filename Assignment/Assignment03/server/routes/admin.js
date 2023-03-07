@@ -2,6 +2,8 @@ const express = require("express");
 const adminController = require("../controllers/admin");
 const productController = require("../controllers/product");
 const isAuthAdmin = require("../middlewares/isAuthAdmin");
+const isAuthConsultant = require('../middlewares/isAuthConsultant')
+const sessionController = require("../controllers/session");
 const { body } = require("express-validator/check");
 const route = express.Router();
 
@@ -52,5 +54,11 @@ route.put(
 
 // DELETE PRODUCT
 route.delete("/product/:id", isAuthAdmin, productController.deleteProduct);
+
+route.get("/rooms", isAuthConsultant, sessionController.getRooms);
+
+route.get("/room/:id", isAuthConsultant, sessionController.getRoomAdmin);
+
+route.patch("/room/:id", isAuthConsultant, sessionController.pushMessageAdmin);
 
 module.exports = route;
