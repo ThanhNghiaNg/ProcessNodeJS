@@ -8,7 +8,6 @@ route.post(
   "/register",
   [
     body("password").custom((value, { req }) => {
-      console.log(req.body);
       if (
         req.body.confirmPassword.length === 0 ||
         req.body.email.length === 0 ||

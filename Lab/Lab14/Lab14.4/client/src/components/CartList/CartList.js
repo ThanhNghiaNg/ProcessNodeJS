@@ -40,6 +40,7 @@ const CartList = (props) => {
 
   let listCartContent = isLoading && <p>Loading...</p>;
   if (data.length > 0) {
+    console.log(data);
     listCartContent = data.map((product) => {
       return (
         <CartItem

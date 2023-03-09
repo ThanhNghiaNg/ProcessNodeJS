@@ -1,0 +1,13 @@
+.content-hotel-list {
+  /* margin-top: 2em; */
+  margin-bottom: 4em;
+}
+
+.content-hotel-list h3 {
+  font-weight: bold;
+}
+.content-hotel-list .hotel-list-items{
+    display: flex;
+    gap: 1em;
+    /* margin-top:2em; */
+}

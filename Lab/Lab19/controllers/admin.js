@@ -182,8 +182,9 @@ exports.deleteProduct = (req, res, next) => {
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.id;
   const pdfDoc = new PDFDocument();
-  // res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Type", "application/pdf;charset=utf-8");
   pdfDoc.pipe(res);
+  // pdfDoc.registerFont("Cardo", __dirname + "/../fonts/Cardo/Cardo-Regular.ttf");
   pdfDoc.fontSize(26).text("Invoice", {
     underline: true,
   });

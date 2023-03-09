@@ -1,0 +1,23 @@
+.form {
+  width: 30rem;
+  margin: 3rem auto;
+  display: flex;
+  flex-direction: column;
+  gap:2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 5px #000;
+  padding: 2rem;
+}
+
+.actions-controls, .input-controls{
+    display: flex;
+    gap: 0.5rem
+}
+
+.input-controls{
+    flex-direction: column;
+}
+
+.actions-controls{
+    justify-content: center;
+}

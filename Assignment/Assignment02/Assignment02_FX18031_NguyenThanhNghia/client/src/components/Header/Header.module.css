@@ -1,0 +1,56 @@
+.header {
+  background-color: #003580;
+  color: white;
+  padding-bottom: 4em !important;
+  position: relative;
+}
+.header button {
+  background-color: #0071c2;
+  color: inherit;
+  padding: 0.5em 1em;
+  border: none;
+}
+.header h2 {
+  margin-bottom: 1em;
+}
+
+.search-form {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 8em;
+  right: 8em;
+  border: 3px solid #febb02;
+  padding: 0.4em 3em;
+  transform: translate(0, 50%);
+  z-index: 3;
+}
+.search-form .icon-input {
+  color: #d3d3d3;
+}
+
+.search-form input {
+  outline: none;
+  border: none;
+  padding: 0em 3em 0em 1em;
+}
+.input-item {
+  display: flex;
+  align-items: center;
+}
+
+.input-item input::-webkit-inner-spin-button,
+.input-item input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.non-padding input {
+  padding: 0;
+  width: 5rem
+}
+.non-padding span {
+  color: #ccc;
+}

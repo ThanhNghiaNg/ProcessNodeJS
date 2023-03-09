@@ -1,19 +1,26 @@
 const Product = require("../models/Product");
-const Cart = require("../models/Cart");
-
+const User = require("../models/User");
 exports.showAllProducts = (req, res, next) => {
   Product.fetchAll().then((data) => {
-    console.log(data);
     res.send({ ok: true, products: data });
   });
 };
 
 exports.getCart = (req, res, next) => {
-  res.redirect("/cart");
+  const result = { items: [], totalPrice: req.user.cart.totalPrice };
+  Promise.all(
+    req.user.cart.items.map((item) => {
+      return Product.findByID(item.id).then((productInfo) => {
+        result.items.push({ ...item, productInfo });
+      });
+    })
+  ).then(() => {
+    res.send(result);
+  });
 };
 
 exports.postCart = (req, res, next) => {
   const product = req.body;
-  Cart.addProduct(product.id, product.price);
-  res.send({ ok: true, product });
+  req.user.addToCart(product);
+  res.send({ ok: true, cart: req.user.cart });
 };

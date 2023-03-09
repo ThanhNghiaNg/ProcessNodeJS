@@ -1,0 +1,23 @@
+.table {
+  width: 100%;
+  border: solid 1px #ccc;
+  font-size: 14px;
+}
+.header th {
+  padding: 0.5rem;
+  font-weight: normal;
+  width: max-content;
+}
+.header th:first-child {
+  padding-left: 1rem;
+}
+.header th:not(:first-child)::before {
+  content: "";
+  border-right: solid 2px #ccc;
+  margin-right: 0.4rem;
+}
+.body td {
+  padding-left: 1rem;
+  padding-block: 0.5rem;
+  border-bottom: solid 1px #ccc;
+}

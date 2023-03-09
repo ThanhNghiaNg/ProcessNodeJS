@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const { validationResult } = require("express-validator");
+
 exports.addProduct = (req, res, next) => {
   const { title, imageUrl, description, price, id } = req.body;
   const userId = req.session.user._id;

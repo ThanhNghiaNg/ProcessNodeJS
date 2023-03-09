@@ -1,0 +1,9 @@
+.date-range-com {
+  position: absolute;
+  bottom: 0;
+  transform: translate(0, 100%);
+  box-shadow: 0 0 5px rgb(88, 88, 88);
+}
+.date-range-com button {
+  background-color: #fff !important;
+}

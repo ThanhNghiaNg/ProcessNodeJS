@@ -1,0 +1,15 @@
+.info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* margin: var(--m2); */
+}
+
+.info__item {
+  display: flex;
+  justify-content: space-between;
+  
+}
+.info__item__icon {
+    align-self: center;
+    font-size: 28px;
+}

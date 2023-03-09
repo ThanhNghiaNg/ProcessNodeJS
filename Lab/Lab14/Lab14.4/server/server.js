@@ -18,7 +18,7 @@ app.use(cors());
 
 //
 app.use((req, res, next) => {
-  User.findById("63934d1eb9c4335d7ec3d7df")
+  User.findById("63946eb047d8cf49254fe0e1")
     .then((user) => {
       req.user = user;
       next();
@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 app.use("/admin", adminRoute);
 
 app.use(shopRoute);
+
 mongoose.set("strictQuery", false);
 mongoose
   .connect(

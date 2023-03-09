@@ -1,0 +1,25 @@
+.filter {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+    gap: 1rem;
+    background-color: #3bc9db;
+    border-radius: 3px;
+    color: white;
+    margin-top: 1.5rem;
+  }
+  
+  .select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 25%;
+  }
+  .select select {
+    border-radius: 3px;
+    background-color: #66d9e8;
+    color: #fff;
+    border: #00bbec;
+    padding: 0.2rem 0.4rem; 
+  }

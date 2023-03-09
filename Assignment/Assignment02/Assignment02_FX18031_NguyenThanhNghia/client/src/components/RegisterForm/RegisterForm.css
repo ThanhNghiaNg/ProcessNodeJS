@@ -1,0 +1,25 @@
+.register-form {
+  text-align: center;
+  background-color: #003580;
+  margin-top: 3em;
+  color: #fff;
+  padding: 3em 0;
+}
+.register-form-control{
+    display: flex;
+    justify-content: center;
+    gap:0.5em;
+}
+.register-form-control button {
+    background-color: #0071c2;
+    color: inherit;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 12px;
+}
+.register-form-control input{
+    width: 20%;
+    border-radius: 12px;
+    padding: 0.5em 1em;
+    outline: none;
+}

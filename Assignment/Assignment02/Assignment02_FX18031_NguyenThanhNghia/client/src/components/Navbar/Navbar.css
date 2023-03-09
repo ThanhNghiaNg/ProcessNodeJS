@@ -1,0 +1,23 @@
+.navbar {
+  background-color: #003580;
+  color: white;
+}
+.container-navbar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+.top-nav button {
+  padding: 0.2em 0.4em;
+  margin-left: 1.5em;
+  color: #003580;
+  border: none;
+}
+.top-nav button a {
+  color: #003580!important;
+}

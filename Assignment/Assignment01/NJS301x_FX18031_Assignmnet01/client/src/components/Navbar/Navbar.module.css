@@ -1,0 +1,30 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  width: 100%;
+  z-index: 10;
+}
+.navbar.change-background{
+  background-color: black;
+}
+.navbar a {
+  text-decoration: none;
+}
+.home {
+  color: orangered;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+.search-icon {
+  width: 1.2em;
+  height: 1.2em;
+  color: black;
+  stroke: black;
+  transform: translate(-150%,0);
+}
+

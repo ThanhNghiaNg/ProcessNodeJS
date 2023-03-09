@@ -1,11 +1,12 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import { serverURL } from "../utils/global";
 import { useNavigate } from "react-router-dom";
 import classes from "./auth.module.css";
+import { AuthContext } from "../../context/AuthProvider";
 
 const LoginForm = (props) => {
   const navigate = useNavigate();
-
+  const authCtx = useContext(AuthContext);
   const usernameRef = useRef();
   const passwordRef = useRef();
 
@@ -27,6 +28,7 @@ const LoginForm = (props) => {
       const data = await respone.json();
       if (respone.status === 200) {
         setMessage({ error: "", success: data.Message });
+        authCtx.setToken(data.csrfToken)
         setTimeout(() => {
           navigate("/");
         }, 1000);

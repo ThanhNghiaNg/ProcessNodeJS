@@ -1,0 +1,30 @@
+.user {
+  font-style: italic;
+}
+.user h2 {
+  text-transform: uppercase;
+}
+
+.user span {
+  color: var(--text-ligth-gray);
+}
+
+.user div > span {
+  margin-right: 0.5rem;
+}
+
+.items {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.items th {
+  text-transform: uppercase;
+  font-style: italic;
+  text-align: center;
+  background-color: var(--bg-ligth-gray);
+}
+.items th,
+td {
+  padding-block: 2rem;
+}

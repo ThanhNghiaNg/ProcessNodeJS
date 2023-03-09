@@ -1,0 +1,24 @@
+.backdrop {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.436);
+  width: 100vw;
+  height: 100vh;
+}
+
+.alert {
+  padding: 2rem;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: fit-content;
+  max-width: 35rem;
+  text-align: center;
+}
+
+.actions-control {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}

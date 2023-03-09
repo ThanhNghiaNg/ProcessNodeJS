@@ -1,0 +1,35 @@
+.sidebar {
+  padding-block: 1rem;
+}
+.section__label {
+  text-transform: uppercase;
+  margin-left: 1.5rem;
+}
+.sidebar ul {
+  margin-top: 0.5rem;
+  /* width: 100%; */
+}
+.sidebar ul li {
+  margin-block: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+}
+.sidebar ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+.sidebar ul li a i {
+  color: var(--dashboard-main-color);
+  width: 2rem;
+  font-size: large;
+}
+
+/* li:has(.active) {
+  background-color: var(--dashboard-secondary-color);
+} */
+.active {
+  /* background-color: #ccc; */
+
+  background-color: var(--dashboard-secondary-color);
+}
