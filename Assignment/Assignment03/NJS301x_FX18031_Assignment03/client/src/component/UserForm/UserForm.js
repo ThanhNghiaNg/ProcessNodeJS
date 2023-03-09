@@ -76,41 +76,6 @@ const UserForm = (props) => {
         }
       }
     );
-    // if user is in resigter page
-    // else {
-    // // change error when user do not type full name
-    // if (!fullNameRef.current.value) {
-    //   setError("Please enter your full name.");
-    // }
-    // // change error when user do not type an valid email (has to include '@')
-    // else if (!emailRef.current.value.includes("@")) {
-    //   setError("Please enter a valid email.");
-    // }
-    // // change error when user do not type a valid password (has to more than 8 characters)
-    // else if (password.length <= 8) {
-    //   setError("Password must have more than 8 characters.");
-    // }
-    // // change error when user do not type phone number
-    // else if (!phoneRef.current.value) {
-    //   setError("Please enter your phone number.");
-    // }
-    // // change error when user do not type a valid phone (only have number)
-    // else if (!Number.isInteger(Number(phoneRef.current.value))) {
-    //   setError("Please enter a valid phone number.");
-    // }
-    // // if all field is valid, handle register
-    // else {
-    //   // register user to store and localStorage
-    //   // Clear error
-    //   setError("");
-    //   // change success message
-    //   setSuccess("Register Successfuly!");
-    //   // Go to login page after show success message 1 second
-    //   setTimeout(() => {
-    //     changeFormHandler();
-    //   }, 1000);
-    // }
-    // }
   };
 
   return (
@@ -134,6 +99,8 @@ const UserForm = (props) => {
           <input type="text" placeholder="Phone" ref={phoneRef}></input>
         )}
       </div>
+      {/* Show message when loading request */}
+      {isLoading && <p className="text-primary text-center">Loading...</p>}
       {/* show message error if it has */}
       {error && <p className="text-danger">{error}</p>}
       {/* show message successs if register or login successfully */}

@@ -30,7 +30,7 @@ function RoomList({ data }) {
           className="form-control"
           placeholder="Search contact"
           onChange={(event) => {
-            setContact(event.target.v);
+            setContact(event.target.value);
           }}
         />
       </div>

@@ -32,7 +32,8 @@ exports.postAdminLogin = (req, res, next) => {
 // Get overall information for dashboard
 exports.getOverallInfo = (req, res, next) => {
   const currentMonth = new Date().getMonth();
-  Transaction.find().sort({createdDate: -1})
+  Transaction.find()
+    .sort({ createdDate: -1 })
     .populate(["user", "hotel"])
     .then((transactions) => {
       const uniqueUsers = [
@@ -44,7 +45,11 @@ exports.getOverallInfo = (req, res, next) => {
         (acc, transaction) => acc + transaction.price,
         0
       );
-      const numMonth = new Set(transactions.map(transaction=> new Date(transaction.createdDate).getMonth()))
+      const numMonth = new Set(
+        transactions.map((transaction) =>
+          new Date(transaction.createdDate).getMonth()
+        )
+      );
 
       const avgEarnings = earnings / numMonth.size;
       return res.send({
@@ -127,7 +132,7 @@ exports.createHotel = (req, res, next) => {
     photos: [...images],
     desc: description,
     featured,
-    price,
+    cheapestPrice: price,
   });
   newHotel
     .save()

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Router, BrowserRouter } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import DetailPage from "./Pages/DetailPage";
@@ -10,18 +10,22 @@ import RegisterPage from "./Pages/RegisterPage";
 import HistoryPage from "./Pages/HistoryPage";
 import OrderDetailPage from "./Pages/OrderDetailPage";
 import Layout from "./component/Layout/Layout";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authActions } from "./store/authSlice";
+import useHttp from "./hooks/useHttp";
+import { serverUrl } from "./utils/constant";
 function App() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // Logout when user close browser
-  // window.onload = () => {
-  //   const cookies = document.cookie;
-  //   console.log(cookies.indexOf("connect.sid"));
-  //   if (cookies.indexOf("connect.sid") === -1) {
-  //     dispatch(authActions.logout());
-  //   }
-  // };
+  const {sendRequest} = useHttp()
+  useEffect(() => {
+    sendRequest({ url: `${serverUrl}/authenticated` }, (data) => {
+      console.log(data);
+      if (data.isLoggedIn !== true) {
+        dispatch(authActions.logout());
+      }
+    });
+  }, []);
   return (
     <React.Fragment>
       <BrowserRouter>

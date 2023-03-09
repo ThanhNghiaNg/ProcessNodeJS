@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 function AuthForm(props) {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-  const { error, sendRequest } = useHttp();
+  const { error, isLoading, sendRequest } = useHttp();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const submitHandler = (event) => {
@@ -60,6 +60,7 @@ function AuthForm(props) {
           }}
         ></input>
       </div>
+      {isLoading && <p className="text-primary text-center">Loading...</p>}
       {error && <p className="text-danger text-center">{error}</p>}
       <div className={classes["actions-controls"]}>
         <button className="btn btn-outline-success" onClick={submitHandler}>
@@ -69,6 +70,17 @@ function AuthForm(props) {
           Reset
         </button>
       </div>
+      <div className="text-primary">
+        <p>Hint:</p>
+        <ul>
+          <li><p>email: <em>"admin@gmail.com"</em></p></li>
+          <li><p>password: <em>"admin"</em></p></li>
+          <br />
+          <li><p>email: <em>"consultant@gmail.com"</em></p></li>
+          <li><p>password: <em>"consultant"</em></p></li>
+        </ul>
+      </div>
+      
     </form>
   );
 }

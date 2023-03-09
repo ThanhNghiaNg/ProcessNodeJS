@@ -7,6 +7,7 @@ function useHttp() {
   const sendRequest = async (config, callback) => {
     try {
       setIsLoading(true);
+      setError(null);
       const respone = await fetch(config.url, {
         method: config.method ? config.method : "GET",
         headers: config.headers
@@ -18,17 +19,6 @@ function useHttp() {
         body: config.body ? config.body : null,
         credentials: "include",
       });
-
-      // const respone = await axios({
-      //   url: config.url,
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "Accept": "application/json, image/*",
-      //   },
-      //   method: config.method ? config.method : "GET",
-      //   withCredentials: true,
-      //   data: config.body ? config.body : null,
-      // });
 
       const data = await respone.json();
 

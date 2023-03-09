@@ -7,7 +7,10 @@ import { useState } from "react";
 function RoomList({ data }) {
   const [contact, setContact] = useState("");
   const listContent = data
-    .filter((item) => item._id.includes(contact))
+    .filter((item) => {
+      console.log(item._id, contact);
+      return item._id.includes(contact);
+    })
     .map((item) => {
       return (
         <li key={item._id} className="border-top border-bottom py-3">
@@ -30,7 +33,7 @@ function RoomList({ data }) {
           className="form-control"
           placeholder="Search contact"
           onChange={(event) => {
-            setContact(event.target.v);
+            setContact(event.target.value);
           }}
         />
       </div>

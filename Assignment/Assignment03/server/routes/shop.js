@@ -11,7 +11,6 @@ route.get("/images-home", shopController.getImagesOverall);
 
 route.get("/products-home", shopController.getProductsOverall);
 
-route.get("/products", productController.get);
 route.get("/products", productController.getProducts);
 
 route.get("/product/:id", productController.getProduct);

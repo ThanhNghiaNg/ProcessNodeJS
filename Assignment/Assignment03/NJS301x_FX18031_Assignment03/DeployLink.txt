@@ -1,0 +1,7 @@
+Client: https://owwi-ecomerce.netlify.app/
+Admin: https://owwi-ecomerce-admin.netlify.app/
+Server: https://simple-e-commerce-server.onrender.com
+
+Exmaple link for testing server: https://simple-e-commerce-server.onrender.com/products
+
+Nên sử dụng Client và Admin ở 2 trình duyệt khác nhau, và không dùng ở trình duyệt ẩn danh để xác thực và tránh xung đột sessions và cookies.

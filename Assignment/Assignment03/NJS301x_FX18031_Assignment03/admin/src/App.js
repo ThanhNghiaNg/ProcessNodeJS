@@ -8,19 +8,25 @@ import Chat from "./pages/Chat";
 import Layout from "./Layout/Layout";
 import AuthForm from "./components/AuthForm/AuthForm";
 import { useSelector, useDispatch } from "react-redux";
-// import { authActions } from "./store/authSlice";
+import { authActions } from "./store/authSlice";
+import { useEffect } from "react";
+import useHttp from "./hooks/useHttp";
+import { serverUrl } from "./utils/global";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
-  // const dispatch = useDispatch();
-  // // Logout when user close browser
-  // window.onload = () => {
-  //   const cookies = document.cookie;
-  //   if (cookies.indexOf("connect.sid") === -1) {
-  //     dispatch(authActions.logout());
-  //   }
-  // };
+  const { sendRequest } = useHttp();
+  const dispatch = useDispatch();
+  // Logout when user close browser
+  useEffect(() => {
+    sendRequest({ url: `${serverUrl}/authenticated` }, (data) => {
+      console.log(data);
+      if (data.isLoggedIn !== true) {
+        dispatch(authActions.logout());
+      }
+    });
+  }, []);
 
   return (
     <BrowserRouter>
